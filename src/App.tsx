@@ -1,18 +1,27 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import logo from './logo.svg'
 import './App.css'
 
+
 function App() {
   const [count, setCount] = useState(0)
+  useEffect(() => {
+    if (count) {
+      console.log('Aprendendo sobre a nova ferramenta!');
+    }
+  }, [count]);
+
+
 
   return (
     <div className="App">
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
-        <p>Hello Vite + React!</p>
+        <p>Ryan Lindão</p>
+        <p><strong>"eu acho que pinto"</strong></p>
         <p>
           <button type="button" onClick={() => setCount((count) => count + 1)}>
-            count is: {count}
+            Adicione pinto no bumbum do Maycon: {count}
           </button>
         </p>
         <p>
