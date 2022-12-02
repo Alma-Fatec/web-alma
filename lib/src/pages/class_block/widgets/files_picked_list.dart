@@ -1,0 +1,22 @@
+import 'package:alma_web/src/controllers/class_block/class_block_controller.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+class FilesPickedList extends StatelessWidget {
+  const FilesPickedList({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final controller = context.watch<ClassBlockController>();
+    return ListView.builder(
+      itemCount: controller.files.length,
+      shrinkWrap: true,
+      itemBuilder: (context, index) => Card(
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(3.0),
+          child: Image.memory(controller.files[index].bytes!, height: 200, fit: BoxFit.cover),
+        ),
+      ),
+    );
+  }
+}

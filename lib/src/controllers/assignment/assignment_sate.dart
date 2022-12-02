@@ -1,0 +1,1 @@
+enum AssignmentState { idle, loading, success, error }

@@ -1,0 +1,1 @@
+enum AuthState { idle, authenticanting, successAuth, errorAuth }
