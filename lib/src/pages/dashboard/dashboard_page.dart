@@ -1,8 +1,8 @@
 import 'package:alma_web/src/controllers/dashboard/dashboard_controller.dart';
 import 'package:alma_web/src/controllers/dashboard/dashboard_state.dart';
 import 'package:alma_web/src/routes/app_routes.dart';
+import 'package:alma_web/src/utils/snackbar.dart';
 import 'package:alma_web/src/widgets/alma_page_structure.dart';
-import 'package:alma_web/src/widgets/alma_text_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -22,14 +22,9 @@ class _DashboardPageState extends State<DashboardPage> {
 
     controller.addListener(() {
       if (controller.state == DashboardState.logoutError) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: AlmaTextWidget(text: 'Não foi possível fazer o logout!'),
-          ),
-        );
+        showSnackBar(context, 'Não foi possível fazer o logout!');
       } else if (controller.state == DashboardState.logoutSuccess) {
-        Navigator.pushNamedAndRemoveUntil(
-            context, Routes.initial, (route) => false);
+        Navigator.pushNamedAndRemoveUntil(context, Routes.initial, (route) => false);
       }
     });
 

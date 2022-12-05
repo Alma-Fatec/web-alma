@@ -1,1 +1,1 @@
-enum AuthState { idle, authenticanting, successAuth, errorAuth }
+enum AuthState { idle, authenticanting, successAuth, errorAuth, isRememberUser }

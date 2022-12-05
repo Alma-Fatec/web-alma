@@ -14,48 +14,52 @@ class ListClassBlockController extends ChangeNotifier {
     _getListClassBlock();
   }
 
+  Future<void> refresh() async {
+    _getListClassBlock();
+  }
+
   Future<void> _getListClassBlock() async {
     listClassBlock.clear();
-    state = ListClassBlockState.loading;
     notifyListeners();
+
+    setState(ListClassBlockState.loading);
 
     try {
       String token = await SharedPref().read('token');
       ListResponse listClassBlockResp =
           await repository.getListClassBlock(token);
 
-      if (listClassBlock.isEmpty) {
-        listClassBlockResp.data?.forEach((element) {
-          listClassBlock.add(Block.fromJson(element));
-        });
-      }
+      listClassBlockResp.data?.forEach((element) {
+        listClassBlock.add(Block.fromJson(element));
+      });
+      notifyListeners();
 
-      state = ListClassBlockState.success;
-      notifyListeners();
+      setState(ListClassBlockState.success);
     } catch (e) {
-      state = ListClassBlockState.error;
-      notifyListeners();
+      setState(ListClassBlockState.error);
 
       throw Exception(e.toString());
     }
   }
 
   Future<void> deleteClassBlock(String id, int index) async {
-    state = ListClassBlockState.loading;
-    notifyListeners();
+    setState(ListClassBlockState.loading);
 
     try {
       String token = await SharedPref().read("token");
       await repository.deleteClassBlock(token, id);
-      
+
       listClassBlock.removeAt(index);
-      state = ListClassBlockState.successDelete;
-      notifyListeners();
+      setState(ListClassBlockState.successDelete);
     } catch (e) {
-      state = ListClassBlockState.errorDelete;
-      notifyListeners();
+      setState(ListClassBlockState.errorDelete);
 
       throw Exception(e.toString());
     }
+  }
+
+  void setState(ListClassBlockState state) {
+    this.state = state;
+    notifyListeners();
   }
 }

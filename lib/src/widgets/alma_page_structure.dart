@@ -4,10 +4,11 @@ import 'package:flutter/material.dart';
 
 class AlmaPageStructure extends StatelessWidget {
   const AlmaPageStructure(
-      {super.key, required this.title, required this.child, this.actions});
+      {super.key, required this.title, required this.child, this.actions, this.floatingActionButon});
 
   final String title;
   final Widget child;
+  final Widget? floatingActionButon;
   final List<Widget>? actions;
 
   @override
@@ -22,7 +23,7 @@ class AlmaPageStructure extends StatelessWidget {
           ),
         ),
         leadingWidth: 110,
-        title: AlmaTextWidget(text: title),
+        title: AlmaText(text: title),
         actions: actions
       ),
       body: Row(
@@ -38,6 +39,7 @@ class AlmaPageStructure extends StatelessWidget {
           )
         ],
       ),
+      floatingActionButton: floatingActionButon,
     );
   }
 }

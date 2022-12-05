@@ -1,17 +1,17 @@
+import 'package:alma_web/src/data/api/client_http.dart';
 import 'package:alma_web/src/data/models/list_response/list_response_model.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class ListAssignmentRepository {
+  HttpClient client;
   ListResponse listResponses;
 
-  ListAssignmentRepository(this.listResponses);
-
+  ListAssignmentRepository(this.listResponses, this.client);
 
   Future<ListResponse> getListAssignments(String token) async {
     try {
-      final response = await Dio().get(
-        "${dotenv.env['BASE_URL']}/assignments",
+      final response = await client.get(
+        "/assignments",
         options: Options(
           headers: {
             "Authorization": "Bearer $token",
@@ -29,8 +29,8 @@ class ListAssignmentRepository {
 
   Future<void> deleteAssignment(String token, String id) async {
     try {
-      await Dio().delete(
-        "${dotenv.env['BASE_URL']}/assignments/$id",
+      await client.delete(
+        "/assignments/$id",
         options: Options(
           headers: {
             "Authorization": "Bearer $token",

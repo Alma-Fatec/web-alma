@@ -22,7 +22,7 @@ class ListClassWidget extends StatelessWidget {
       );
     } else if (controller.listClasses.isEmpty) {
       return const Center(
-        child: AlmaTextWidget(
+        child: AlmaText(
           text: 'Nenhum item encontrado na lista',
           fontSize: 22,
           fontWeight: FontWeight.w500,
@@ -36,12 +36,12 @@ class ListClassWidget extends StatelessWidget {
         itemBuilder: (context, index) => Card(
           color: AlmaTheme.greyAlmaColor,
           child: ListTile(
-            title: AlmaTextWidget(
+            title: AlmaText(
               text: controller.listClasses[index].name!,
               fontWeight: FontWeight.bold,
               fontSize: 18,
             ),
-            subtitle: AlmaTextWidget(
+            subtitle: AlmaText(
               text: controller.listClasses[index].description!,
               fontWeight: FontWeight.w600,
             ),

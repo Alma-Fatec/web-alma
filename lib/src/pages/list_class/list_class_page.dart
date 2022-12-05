@@ -3,11 +3,11 @@ import 'package:alma_web/src/controllers/list_class/list_class_state.dart';
 import 'package:alma_web/src/pages/list_class/widgets/list_class_widget.dart';
 import 'package:alma_web/src/routes/app_routes.dart';
 import 'package:alma_web/src/theme/alma_theme.dart';
+import 'package:alma_web/src/utils/snackbar.dart';
 import 'package:alma_web/src/widgets/alma_button_widget.dart';
 import 'package:alma_web/src/widgets/alma_page_structure.dart';
 import 'package:alma_web/src/widgets/alma_text_field.dart';
 import 'package:alma_web/src/widgets/alma_text_widget.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -27,19 +27,9 @@ class _ListClassPageState extends State<ListClassPage> {
 
     controller.addListener(() {
       if (controller.state == ListClassState.error) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: AlmaTextWidget(
-                text: 'Não foi possível carregar a lista de aulas!'),
-          ),
-        );
+        showSnackBar(context, 'Não foi possível carregar a lista de aulas!');
       } else if (controller.state == ListClassState.success) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            duration: Duration(milliseconds: 1000),
-            content: AlmaTextWidget(text: 'Lista carregada com sucesso!'),
-          ),
-        );
+        showSnackBar(context, 'Lista carregada com sucesso!');
       }
     });
 
@@ -68,7 +58,7 @@ class _ListClassPageState extends State<ListClassPage> {
                 iconData: Icons.add_circle_outline,
                 color: AlmaTheme.primaryColor,
                 width: 220,
-                child: const AlmaTextWidget(text: 'Criar aula'),
+                child: const AlmaText(text: 'Criar aula'),
               )
             ],
           ),

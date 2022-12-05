@@ -2,6 +2,7 @@ import 'package:alma_web/src/controllers/list_class_block/list_class_block_contr
 import 'package:alma_web/src/controllers/list_class_block/list_class_block_state.dart';
 import 'package:alma_web/src/routes/app_routes.dart';
 import 'package:alma_web/src/theme/alma_theme.dart';
+import 'package:alma_web/src/utils/snackbar.dart';
 import 'package:alma_web/src/widgets/alma_button_widget.dart';
 import 'package:alma_web/src/widgets/alma_page_structure.dart';
 import 'package:alma_web/src/widgets/alma_text_field.dart';
@@ -26,36 +27,30 @@ class _ListClassBlockPageState extends State<ListClassBlockPage> {
 
     controller.addListener(() {
       if (controller.state == ListClassBlockState.error) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: AlmaTextWidget(
-                text: 'Não foi possível carregar a lista de blocos!'),
-          ),
-        );
+        showSnackBar(context, 'Não foi possível carregar a lista de blocos!');
       } else if (controller.state == ListClassBlockState.success) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            duration: Duration(milliseconds: 1000),
-            content: AlmaTextWidget(text: 'Lista carregada com sucesso!'),
-          ),
-        );
+        showSnackBar(context, 'Lista carregada com sucesso!', durationMilli: 1000);
       }
     });
 
     super.initState();
   }
 
-
   @override
   Widget build(BuildContext context) {
     return AlmaPageStructure(
       title: 'ALMA',
+      floatingActionButon: FloatingActionButton.extended(
+        onPressed: () => controller.refresh(),
+        label: const AlmaText(text: 'Recarregar'),
+        icon: const Icon(Icons.refresh),
+      ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children:  [
+            children: [
               const SizedBox(
                 width: 400,
                 child: AlmaTextField(
@@ -68,8 +63,8 @@ class _ListClassBlockPageState extends State<ListClassBlockPage> {
                 iconData: Icons.add_circle_outline,
                 color: AlmaTheme.primaryColor,
                 width: 220,
-                child: const AlmaTextWidget(text: 'Criar bloco de aula'),
-              )
+                child: const AlmaText(text: 'Criar bloco de aula'),
+              ),
             ],
           ),
           const SizedBox(height: 20),
@@ -85,7 +80,7 @@ class _ListClassBlockPageState extends State<ListClassBlockPage> {
                   );
                 } else if (value.listClassBlock.isEmpty) {
                   return const Center(
-                    child: AlmaTextWidget(
+                    child: AlmaText(
                       text: 'Nenhum item encontrado na lista',
                       fontSize: 22,
                       fontWeight: FontWeight.w500,
@@ -99,20 +94,19 @@ class _ListClassBlockPageState extends State<ListClassBlockPage> {
                     itemBuilder: (context, index) => Card(
                       color: AlmaTheme.greyAlmaColor,
                       child: ListTile(
-                        title: AlmaTextWidget(
+                        title: AlmaText(
                           text: value.listClassBlock[index].title!,
                           fontWeight: FontWeight.bold,
                           fontSize: 18,
                         ),
-                        subtitle: AlmaTextWidget(
-                          text:
-                              value.listClassBlock[index].description!,
+                        subtitle: AlmaText(
+                          text: value.listClassBlock[index].description!,
                           fontWeight: FontWeight.w600,
                         ),
                         onTap: () {},
                         trailing: AlmaButtonWidget(
                           onPressed: () => value.deleteClassBlock(
-                            value.listClassBlock[index].id!, 
+                            value.listClassBlock[index].id!,
                             index,
                           ),
                           height: 40,

@@ -1,5 +1,5 @@
 import 'package:alma_web/src/controllers/dashboard/dashboard_state.dart';
-import 'package:alma_web/src/utils/shared_pref.dart';
+// import 'package:alma_web/src/utils/shared_pref.dart';
 import 'package:flutter/widgets.dart';
 
 class DashboardController extends ChangeNotifier {
@@ -7,10 +7,10 @@ class DashboardController extends ChangeNotifier {
 
   Future<void> logout() async {
     try {
-      if (!await SharedPref().clearAll()) {
+     /*  if (!await SharedPref().remove('user')) {
         setState(DashboardState.logoutError);
         return;
-      }
+      } */
 
       setState(DashboardState.logoutSuccess);
     } catch (e) {

@@ -5,6 +5,7 @@ import 'package:alma_web/src/pages/class_block/widgets/files_picked_list.dart';
 import 'package:alma_web/src/pages/class_block/widgets/list_users_selected.dart';
 import 'package:alma_web/src/routes/app_routes.dart';
 import 'package:alma_web/src/theme/alma_theme.dart';
+import 'package:alma_web/src/utils/snackbar.dart';
 import 'package:alma_web/src/widgets/alma_button_widget.dart';
 import 'package:alma_web/src/widgets/alma_page_structure.dart';
 import 'package:alma_web/src/widgets/alma_text_field.dart';
@@ -31,20 +32,10 @@ class _ClassBlockPageState extends State<ClassBlockPage> {
 
     controller.addListener(() {
       if (controller.state == ClassBlockState.error) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: AlmaTextWidget(
-                text: 'Não foi possível salvar o bloco de aula!'),
-          ),
-        );
+        showSnackBar(context, 'Não foi possível salvar o bloco de aula!');
       } else if (controller.state == ClassBlockState.success) {
         clearFields();
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            duration: Duration(milliseconds: 1000),
-            content: AlmaTextWidget(text: 'Bloco de aula salvo com sucesso!'),
-          ),
-        );
+        showSnackBar(context, 'Bloco de aula salvo com sucesso!', durationMilli: 1000);
       }
     });
 
@@ -69,7 +60,7 @@ class _ClassBlockPageState extends State<ClassBlockPage> {
             width: 130,
             iconData: Icons.add_circle_outline,
             color: Colors.green,
-            child: AlmaTextWidget(
+            child: AlmaText(
                 text: value.state == ClassBlockState.loading
                     ? 'Salvando'
                     : 'Salvar'),
@@ -106,7 +97,7 @@ class _ClassBlockPageState extends State<ClassBlockPage> {
                         onPressed: () => _openDialog(),
                         color: AlmaTheme.actionColor,
                         iconData: Icons.add_circle_outline,
-                        child: const AlmaTextWidget(text: "Adicionar alunos"),
+                        child: const AlmaText(text: "Adicionar alunos"),
                       ),
                       const SizedBox(height: 12),
                       const ListUserSelected(),
@@ -122,7 +113,7 @@ class _ClassBlockPageState extends State<ClassBlockPage> {
                         onPressed: () => controller.pickFiles(),
                         color: AlmaTheme.primaryColor,
                         iconData: Icons.folder_copy_outlined,
-                        child: const AlmaTextWidget(text: 'Selecionar arquivo'),
+                        child: const AlmaText(text: 'Selecionar arquivo'),
                       ),
                       const SizedBox(height: 12),
                       const FilesPickedList(),

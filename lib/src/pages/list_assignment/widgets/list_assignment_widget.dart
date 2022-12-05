@@ -22,7 +22,7 @@ class ListAssignmentWidget extends StatelessWidget {
       );
     } else if (controller.listAssignments.isEmpty) {
       return const Center(
-        child: AlmaTextWidget(
+        child: AlmaText(
           text: 'Nenhum item encontrado na lista',
           fontSize: 22,
           fontWeight: FontWeight.w500,
@@ -36,12 +36,12 @@ class ListAssignmentWidget extends StatelessWidget {
         itemBuilder: (context, index) => Card(
           color: AlmaTheme.greyAlmaColor,
           child: ListTile(
-            title: AlmaTextWidget(
+            title: AlmaText(
               text: controller.listAssignments[index].title!,
               fontWeight: FontWeight.bold,
               fontSize: 18,
             ),
-            subtitle: AlmaTextWidget(
+            subtitle: AlmaText(
               text: controller.listAssignments[index].description!,
               fontWeight: FontWeight.w600,
             ),

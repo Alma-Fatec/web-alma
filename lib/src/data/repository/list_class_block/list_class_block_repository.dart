@@ -1,16 +1,17 @@
+import 'package:alma_web/src/data/api/client_http.dart';
 import 'package:alma_web/src/data/models/list_response/list_response_model.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class ListClassBlockRepository {
+  HttpClient client;
   ListResponse listResponses;
 
-    ListClassBlockRepository(this.listResponses);
+  ListClassBlockRepository(this.listResponses, this.client);
 
   Future<ListResponse> getListClassBlock(String token) async {
     try {
-      final response = await Dio().get(
-        "${dotenv.env['BASE_URL']}/classesBlock",
+      final response = await client.get(
+        "/classesBlock",
         options: Options(
           headers: {
             "Authorization": "Bearer $token",
@@ -28,8 +29,8 @@ class ListClassBlockRepository {
 
   Future<void> deleteClassBlock(String token, String id) async {
     try {
-      await Dio().delete(
-        "${dotenv.env['BASE_URL']}/classesBlock/$id",
+      await client.delete(
+        "/classesBlock/$id",
         options: Options(
           headers: {
             "Authorization": "Bearer $token",

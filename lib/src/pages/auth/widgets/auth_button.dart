@@ -19,7 +19,7 @@ class AuthButton extends StatelessWidget {
       color: AlmaTheme.primaryColor,
       child: controller.state == AuthState.authenticanting
           ? const CircularProgressIndicator(color: Colors.white)
-          : const AlmaTextWidget(text: 'Entrar', color: Colors.white, fontWeight: FontWeight.bold),
+          : const AlmaText(text: 'Entrar', color: Colors.white, fontWeight: FontWeight.bold),
     );
   }
 }

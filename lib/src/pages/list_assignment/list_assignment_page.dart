@@ -1,14 +1,13 @@
 import 'package:alma_web/src/controllers/list_assignment/list_assignment_controller.dart';
 import 'package:alma_web/src/controllers/list_assignment/list_assignment_state.dart';
-import 'package:alma_web/src/controllers/list_class_block/list_class_block_state.dart';
 import 'package:alma_web/src/pages/list_assignment/widgets/list_assignment_widget.dart';
 import 'package:alma_web/src/routes/app_routes.dart';
 import 'package:alma_web/src/theme/alma_theme.dart';
+import 'package:alma_web/src/utils/snackbar.dart';
 import 'package:alma_web/src/widgets/alma_button_widget.dart';
 import 'package:alma_web/src/widgets/alma_page_structure.dart';
 import 'package:alma_web/src/widgets/alma_text_field.dart';
 import 'package:alma_web/src/widgets/alma_text_widget.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -28,19 +27,9 @@ class _ListAssignmentPageState extends State<ListAssignmentPage> {
 
     controller.addListener(() {
       if (controller.state == ListAssignmentState.error) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: AlmaTextWidget(
-                text: 'Não foi possível carregar a lista de atividades!'),
-          ),
-        );
+        showSnackBar(context, 'Não foi possível carregar a lista de atividades!');
       } else if (controller.state == ListAssignmentState.success) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            duration: Duration(milliseconds: 1000),
-            content: AlmaTextWidget(text: 'Lista carregada com sucesso!'),
-          ),
-        );
+        showSnackBar(context, 'Lista carregada com sucesso!');
       }
     });
 
@@ -56,7 +45,7 @@ class _ListAssignmentPageState extends State<ListAssignmentPage> {
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children:  [
+            children: [
               const SizedBox(
                 width: 400,
                 child: AlmaTextField(
@@ -65,11 +54,12 @@ class _ListAssignmentPageState extends State<ListAssignmentPage> {
                 ),
               ),
               AlmaButtonWidget(
-                onPressed: () => Navigator.pushNamed(context, Routes.newAssignment),
+                onPressed: () =>
+                    Navigator.pushNamed(context, Routes.newAssignment),
                 iconData: Icons.add_circle_outline,
                 color: AlmaTheme.primaryColor,
                 width: 220,
-                child: const AlmaTextWidget(text: 'Criar atividade'),
+                child: const AlmaText(text: 'Criar atividade'),
               )
             ],
           ),

@@ -20,52 +20,52 @@ class ProfileInfoWidget extends StatelessWidget {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const AlmaTextWidget(
+          const AlmaText(
             text: "Nome",
             color: AlmaTheme.blackAlmaColor,
             fontWeight: FontWeight.bold,
             fontSize: 24,
           ),
-          AlmaTextWidget(
+          AlmaText(
             text: controller.user.name!,
             fontSize: 18,
             fontWeight: FontWeight.w500,
           ),
 
           const SizedBox(height: 12),
-          const AlmaTextWidget(
+          const AlmaText(
             text: "E-mail",
             color: AlmaTheme.blackAlmaColor,
             fontWeight: FontWeight.bold,
             fontSize: 24,
           ),
-          AlmaTextWidget(
+          AlmaText(
             text: controller.user.email!,
             fontSize: 18,
             fontWeight: FontWeight.w500,
           ),
 
           const SizedBox(height: 12),
-          const AlmaTextWidget(
+          const AlmaText(
             text: "CPF",
             color: AlmaTheme.blackAlmaColor,
             fontWeight: FontWeight.bold,
             fontSize: 24,
           ),
-          AlmaTextWidget(
+          AlmaText(
             text: controller.user.cpf!,
             fontSize: 18,
             fontWeight: FontWeight.w500,
           ),
 
           const SizedBox(height: 12),
-          const AlmaTextWidget(
+          const AlmaText(
             text: "Telefone",
             color: AlmaTheme.blackAlmaColor,
             fontWeight: FontWeight.bold,
             fontSize: 24,
           ),
-          AlmaTextWidget(
+          AlmaText(
             text: controller.user.phone ?? "Não encontrado",
             fontSize: 18,
             fontWeight: FontWeight.w500,

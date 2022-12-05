@@ -23,7 +23,7 @@ class _RegisterButtonState extends State<RegisterButton> {
       color: AlmaTheme.primaryColor,
       child: controller.state == RegisterState.loading
           ? const CircularProgressIndicator(color: Colors.white)
-          : const AlmaTextWidget(
+          : const AlmaText(
               text: 'Cadastrar',
               color: Colors.white,
               fontWeight: FontWeight.bold),

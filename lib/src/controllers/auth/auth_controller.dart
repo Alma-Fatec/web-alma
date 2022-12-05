@@ -16,24 +16,48 @@ class AuthController extends ChangeNotifier {
   var state = AuthState.idle;
 
   AuthRepository authRepository;
-  AuthController(this.authRepository);
+  AuthController(this.authRepository) {
+    init();
+  }
+
+  Future<void> init() async {
+    bool? rememberUser = await SharedPref().read('rememberUser');
+
+    if (rememberUser != null) {
+      if (rememberUser) {
+        setState(AuthState.isRememberUser);
+        return;
+      }
+      setState(AuthState.idle);
+      return;
+    }
+
+    setState(AuthState.idle);
+  }
 
   Future<void> authAction() async {
     setState(AuthState.authenticanting);
     try {
-      Auth auth = await authRepository.authRequest(email, password);
-      
+      String token = await SharedPref().read('token');
+      Auth auth = await authRepository.authRequest(email, password, token);
+
       if (auth.token == null) {
-        setMessage(auth.message ?? 'Usuário não encontrado ao tentar autenticar!');
+        setMessage(
+            auth.message ?? 'Usuário não encontrado ao tentar autenticar!');
         throw Exception('Usuário não encontrado ao tentar autenticar!');
       }
 
-      if (!await saveTokenSharedPref(auth.token!)) {
+      if (!await _saveTokenSharedPref(auth.token!)) {
         setMessage('Token não foi salvo nas preferencias!');
         throw Exception('Token não foi salvo nas preferencias!');
       }
 
-      if (!await saveUserSharedPref(auth.user!)) {
+      if (!await _saveUserSharedPref(auth.user!)) {
+        setMessage('Usuário não foi salvo nas preferências!');
+        throw Exception('Usuário não foi salvo nas preferências!');
+      }
+
+      if (!await _rememberUser()) {
         setMessage('Usuário não foi salvo nas preferências!');
         throw Exception('Usuário não foi salvo nas preferências!');
       }
@@ -46,20 +70,28 @@ class AuthController extends ChangeNotifier {
     }
   }
 
-  Future<bool> saveTokenSharedPref(String token) async {
+  Future<bool> _saveTokenSharedPref(String token) {
     return SharedPref().save("token", token);
   }
 
-  Future<bool> saveUserSharedPref(User user) async {
+  Future<bool> _saveUserSharedPref(User user) {
     return SharedPref().save("user", json.encode(user.toJson()));
   }
 
+  Future<bool> _rememberUser() {
+    return SharedPref().saveBool("rememberUser", checked);
+  }
+
   void seePasswordAction() {
+    setState(AuthState.idle);
+
     obscurePassword = !obscurePassword;
     notifyListeners();
   }
 
   void toggleCheckRemember(bool value) {
+    setState(AuthState.idle);
+
     checked = value;
     notifyListeners();
   }

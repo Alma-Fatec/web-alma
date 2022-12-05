@@ -3,6 +3,7 @@ import 'package:alma_web/src/controllers/assignment/assignment_sate.dart';
 import 'package:alma_web/src/pages/assignment/widgets/files_picked_list.dart';
 import 'package:alma_web/src/routes/app_routes.dart';
 import 'package:alma_web/src/theme/alma_theme.dart';
+import 'package:alma_web/src/utils/snackbar.dart';
 import 'package:alma_web/src/widgets/alma_button_widget.dart';
 import 'package:alma_web/src/widgets/alma_page_structure.dart';
 import 'package:alma_web/src/widgets/alma_text_field.dart';
@@ -30,20 +31,10 @@ class _AssignmentPageState extends State<AssignmentPage> {
 
     controller.addListener(() {
       if (controller.state == AssignmentState.error) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content:
-                AlmaTextWidget(text: 'Não foi possível salvar a atividade!'),
-          ),
-        );
+        showSnackBar(context, 'Não foi possível salvar a atividade!');
       } else if (controller.state == AssignmentState.success) {
         clearFields();
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            duration: Duration(milliseconds: 1000),
-            content: AlmaTextWidget(text: 'Atividade salva com sucesso!'),
-          ),
-        );
+        showSnackBar(context, 'Atividade salva com sucesso!', durationMilli: 1000);
       }
     });
     super.initState();
@@ -68,7 +59,7 @@ class _AssignmentPageState extends State<AssignmentPage> {
             width: 130,
             iconData: Icons.add_circle_outline,
             color: Colors.green,
-            child: AlmaTextWidget(
+            child: AlmaText(
                 text: value.state == AssignmentState.loading
                     ? 'Salvando'
                     : 'Salvar'),
@@ -116,7 +107,7 @@ class _AssignmentPageState extends State<AssignmentPage> {
                     onPressed: () => controller.pickFiles(),
                     color: AlmaTheme.primaryColor,
                     iconData: Icons.folder_copy_outlined,
-                    child: const AlmaTextWidget(text: 'Selecionar arquivo'),
+                    child: const AlmaText(text: 'Selecionar arquivo'),
                   ),
                   const SizedBox(height: 12),
                   const FilesPickedList(),

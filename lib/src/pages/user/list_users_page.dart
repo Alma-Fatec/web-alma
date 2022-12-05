@@ -2,6 +2,7 @@ import 'package:alma_web/src/controllers/user/user_controller.dart';
 import 'package:alma_web/src/controllers/user/user_state.dart';
 import 'package:alma_web/src/routes/app_routes.dart';
 import 'package:alma_web/src/theme/alma_theme.dart';
+import 'package:alma_web/src/utils/snackbar.dart';
 import 'package:alma_web/src/widgets/alma_button_widget.dart';
 import 'package:alma_web/src/widgets/alma_page_structure.dart';
 import 'package:alma_web/src/widgets/alma_text_field.dart';
@@ -26,19 +27,9 @@ class _ListUsersPageState extends State<ListUsersPage> {
 
     controller.addListener(() {
       if (controller.state == UserState.error) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: AlmaTextWidget(
-                text: 'Não foi possível carregar a lista de usuários!'),
-          ),
-        );
+        showSnackBar(context, 'Não foi possível carregar a lista de usuários!');
       } else if (controller.state == UserState.success) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            duration: Duration(milliseconds: 1000),
-            content: AlmaTextWidget(text: 'Lista carregada com sucesso!'),
-          ),
-        );
+        showSnackBar(context, 'Lista carregada com sucesso!', durationMilli: 1000);
       }
     });
 
@@ -54,7 +45,7 @@ class _ListUsersPageState extends State<ListUsersPage> {
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children:  [
+            children: [
               const SizedBox(
                 width: 400,
                 child: AlmaTextField(
@@ -63,11 +54,12 @@ class _ListUsersPageState extends State<ListUsersPage> {
                 ),
               ),
               AlmaButtonWidget(
-                onPressed: () => Navigator.pushNamed(context, Routes.newAssignment),
+                onPressed: () =>
+                    Navigator.pushNamed(context, Routes.newAssignment),
                 iconData: Icons.add_circle_outline,
                 color: AlmaTheme.primaryColor,
                 width: 220,
-                child: const AlmaTextWidget(text: 'Cadastrar aluno'),
+                child: const AlmaText(text: 'Cadastrar aluno'),
               )
             ],
           ),
@@ -84,7 +76,7 @@ class _ListUsersPageState extends State<ListUsersPage> {
                   );
                 } else if (value.users.isEmpty) {
                   return const Center(
-                    child: AlmaTextWidget(
+                    child: AlmaText(
                       text: 'Nenhum item encontrado na lista',
                       fontSize: 22,
                       fontWeight: FontWeight.w500,
@@ -98,14 +90,13 @@ class _ListUsersPageState extends State<ListUsersPage> {
                     itemBuilder: (context, index) => Card(
                       color: AlmaTheme.greyAlmaColor,
                       child: ListTile(
-                        title: AlmaTextWidget(
+                        title: AlmaText(
                           text: controller.users[index].name!,
                           fontWeight: FontWeight.bold,
                           fontSize: 18,
                         ),
-                        subtitle: AlmaTextWidget(
-                          text:
-                              controller.users[index].email!,
+                        subtitle: AlmaText(
+                          text: controller.users[index].email!,
                           fontWeight: FontWeight.w600,
                         ),
                         onTap: () {},

@@ -1,17 +1,21 @@
+import 'package:alma_web/src/data/api/client_http.dart';
 import 'package:alma_web/src/data/models/class/class_model.dart';
 import 'package:alma_web/src/data/models/list_response/list_response_model.dart';
 import 'package:dio/dio.dart';
 // ignore: depend_on_referenced_packages
 import 'package:http_parser/http_parser.dart' show MediaType;
 import 'package:file_picker/file_picker.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class ClassRepository {
+  HttpClient client;
+
+  ClassRepository(this.client);
+
   Future<void> createClass(String token, PlatformFile file, Class classe,
       List<Map<String, dynamic>> blocks) async {
     try {
-      final response = await Dio().post(
-        "${dotenv.env['BASE_URL']}/classes",
+      final response = await client.post(
+        "/classes",
         data: FormData.fromMap({
           "description": classe.description,
           "cover": MultipartFile.fromBytes(
@@ -21,11 +25,13 @@ class ClassRepository {
           ),
           "order": classe.order,
           "name": classe.name,
-          blocks.map((e) => e.keys)
+          blocks
+                  .map((e) => e.keys)
                   .toString()
                   .replaceAll('(', '')
                   .replaceAll(')', ''):
-          blocks.map((e) => e.values)
+              blocks
+                  .map((e) => e.values)
                   .toString()
                   .replaceAll('(', '')
                   .replaceAll(')', ''),
@@ -48,8 +54,8 @@ class ClassRepository {
   Future<ListResponse> getListClassBlock(String token) async {
     ListResponse listResponses;
     try {
-      final response = await Dio().get(
-        "${dotenv.env['BASE_URL']}/classesBlock",
+      final response = await client.get(
+        "/classesBlock",
         options: Options(
           headers: {
             "Authorization": "Bearer $token",
