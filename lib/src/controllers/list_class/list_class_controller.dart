@@ -9,6 +9,9 @@ class ListClassController extends ChangeNotifier {
   var state = ListClassState.idle;
   List<Class> listClasses = [];
 
+  int page = 1;
+  bool isLastPage = false;
+
   ListClassRepository repository;
   ListClassController(this.repository) {
     _getListClass();
@@ -24,11 +27,8 @@ class ListClassController extends ChangeNotifier {
 
     try {
       String token = await SharedPref().read('token');
-      ListResponse listClassBlockResp = await repository.getListClasses(token);
-
-      listClassBlockResp.data?.forEach((element) {
-        listClasses.add(Class.fromJson(element));
-      });
+      ListResponse listClassResp = await repository.getListClasses(token, page);
+      setListClass(listClassResp);
 
       setState(ListClassState.success);
     } catch (e) {
@@ -51,6 +51,31 @@ class ListClassController extends ChangeNotifier {
 
       Exception(e.toString());
     }
+  }
+
+  void setListClass(ListResponse listClassResp) {
+    listClasses.clear();
+    listClassResp.data?.forEach((element) {
+      listClasses.add(Class.fromJson(element));
+    });
+  }
+
+  void nextPage() {
+    isLastPage = listClasses.length < 10;
+
+    if (isLastPage) {
+      return;
+    }
+    page++;
+    _getListClass();
+  }
+
+  void backPage() {
+    if (page == 1) {
+      return;
+    }
+    page--;
+    _getListClass();
   }
 
   void setState(ListClassState state) {

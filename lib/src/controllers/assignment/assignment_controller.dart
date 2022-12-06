@@ -21,6 +21,8 @@ class AssignmentController extends ChangeNotifier {
   AssignmentController(this.repository, this.filePicker);
 
   Future<void> createAssignment() async {
+    setState(AssignmentState.loading);
+
     try {
       String token = await SharedPref().read("token");
       await repository.createAssignment(
@@ -34,17 +36,17 @@ class AssignmentController extends ChangeNotifier {
       );
 
       files.clear();
-      state = AssignmentState.success;
-      notifyListeners();
+      setState(AssignmentState.success);
     } catch (e) {
-      state = AssignmentState.error;
-      notifyListeners();
+      setState(AssignmentState.error);
 
-      throw Exception(e.toString());
+      Exception(e.toString());
     }
   }
 
   Future<void> pickFiles() async {
+    setState(AssignmentState.idle);
+
     PlatformFile file;
     files.clear();
 
@@ -60,5 +62,10 @@ class AssignmentController extends ChangeNotifier {
     } catch (e) {
       throw Exception(e.toString());
     }
+  }
+
+  void setState(AssignmentState state) {
+    this.state = state;
+    notifyListeners();
   }
 }

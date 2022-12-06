@@ -70,9 +70,19 @@ class _ListAssignmentPageState extends State<ListAssignmentPage> {
             ],
           ),
           const SizedBox(height: 20),
-          SizedBox(
-            height: MediaQuery.of(context).size.height,
-            child: const ListAssignmentWidget(),
+          const ListAssignmentWidget(),
+          const SizedBox(height: 20),
+          Row(
+            children: [
+              TextButton(
+                onPressed: () => controller.nextPage(),
+                child: const AlmaText(text: 'Anterior'),
+              ),
+              TextButton(
+                onPressed: () => controller.backPage(),
+                child: const AlmaText(text: 'Próximo'),
+              ),
+            ],
           ),
         ],
       ),

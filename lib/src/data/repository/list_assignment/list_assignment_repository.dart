@@ -8,10 +8,13 @@ class ListAssignmentRepository {
 
   ListAssignmentRepository(this.listResponses, this.client);
 
-  Future<ListResponse> getListAssignments(String token) async {
+  Future<ListResponse> getListAssignments(String token, int page) async {
     try {
       final response = await client.get(
         "/assignments",
+        queryParameters: {
+          "page": page,
+        },
         options: Options(
           headers: {
             "Authorization": "Bearer $token",

@@ -8,10 +8,13 @@ class ListClassRepository {
   
   ListClassRepository(this.listResponses, this.client);
 
-  Future<ListResponse> getListClasses(String token) async {
+  Future<ListResponse> getListClasses(String token, int page) async {
     try {
       final response = await client.get(
         "/classes",
+        queryParameters: {
+          "page": page,
+        },
         options: Options(
           headers: {
             "Authorization": "Bearer $token",

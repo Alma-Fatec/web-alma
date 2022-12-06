@@ -8,7 +8,6 @@ import 'package:alma_web/src/widgets/alma_button_widget.dart';
 import 'package:alma_web/src/widgets/alma_page_structure.dart';
 import 'package:alma_web/src/widgets/alma_text_field.dart';
 import 'package:alma_web/src/widgets/alma_text_widget.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -71,9 +70,19 @@ class _ListClassBlockPageState extends State<ListClassBlockPage> {
             ],
           ),
           const SizedBox(height: 20),
-          SizedBox(
-            height: MediaQuery.of(context).size.height,
-            child: const ListClassBlockWidget()
+          const ListClassBlockWidget(),
+          const SizedBox(height: 20),
+          Row(
+            children: [
+              TextButton(
+                onPressed: () => controller.nextPage(),
+                child: const AlmaText(text: 'Anterior'),
+              ),
+              TextButton(
+                onPressed: () => controller.backPage(),
+                child: const AlmaText(text: 'Próximo'),
+              ),
+            ],
           ),
         ],
       ),

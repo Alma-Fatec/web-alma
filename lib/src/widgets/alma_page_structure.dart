@@ -4,7 +4,11 @@ import 'package:flutter/material.dart';
 
 class AlmaPageStructure extends StatelessWidget {
   const AlmaPageStructure(
-      {super.key, required this.title, required this.child, this.actions, this.floatingActionButon});
+      {super.key,
+      required this.title,
+      required this.child,
+      this.actions,
+      this.floatingActionButon});
 
   final String title;
   final Widget child;
@@ -15,17 +19,16 @@ class AlmaPageStructure extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: Image.asset(
-            'assets/images/logo_alma.png',
-            fit: BoxFit.cover,
+          leading: Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: Image.asset(
+              'assets/images/logo_alma.png',
+              fit: BoxFit.cover,
+            ),
           ),
-        ),
-        leadingWidth: 110,
-        title: AlmaText(text: title, fontSize: 26),
-        actions: actions
-      ),
+          leadingWidth: 110,
+          title: AlmaText(text: title, fontSize: 26),
+          actions: actions),
       body: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.max,

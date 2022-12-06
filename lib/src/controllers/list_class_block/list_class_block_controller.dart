@@ -9,6 +9,9 @@ class ListClassBlockController extends ChangeNotifier {
   var state = ListClassBlockState.idle;
   List<Block> listClassBlock = [];
 
+  int page = 1;
+  bool isLastPage = false;
+
   ListClassBlockRepository repository;
   ListClassBlockController(this.repository) {
     _getListClassBlock();
@@ -19,22 +22,18 @@ class ListClassBlockController extends ChangeNotifier {
   }
 
   Future<void> _getListClassBlock() async {
-    listClassBlock.clear();
     setState(ListClassBlockState.loading);
     try {
       String token = await SharedPref().read('token');
-      ListResponse listClassBlockResp =
-          await repository.getListClassBlock(token);
+      ListResponse listClassBlockResp = await repository.getListClassBlock(token, page);
 
-      listClassBlockResp.data?.forEach((element) {
-        listClassBlock.add(Block.fromJson(element));
-      });
-    
+      setListClassBlock(listClassBlockResp);
+
       setState(ListClassBlockState.success);
     } catch (e) {
       setState(ListClassBlockState.error);
 
-      throw Exception(e.toString());
+      Exception(e.toString());
     }
   }
 
@@ -50,8 +49,33 @@ class ListClassBlockController extends ChangeNotifier {
     } catch (e) {
       setState(ListClassBlockState.errorDelete);
 
-      throw Exception(e.toString());
+      Exception(e.toString());
     }
+  }
+
+  void setListClassBlock(ListResponse listClassBlockResp) {
+    listClassBlock.clear();
+    listClassBlockResp.data?.forEach((element) {
+      listClassBlock.add(Block.fromJson(element));
+    });
+  }
+
+  void nextPage() {
+    isLastPage = listClassBlock.length < 10;
+
+    if (isLastPage) {
+      return;
+    }
+    page++;
+    _getListClassBlock();
+  }
+
+  void backPage() {
+    if (page == 1) {
+      return;
+    }
+    page--;
+    _getListClassBlock();
   }
 
   void setState(ListClassBlockState state) {

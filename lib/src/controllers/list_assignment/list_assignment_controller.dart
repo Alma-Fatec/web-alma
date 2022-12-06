@@ -10,6 +10,9 @@ class ListAssignmentController extends ChangeNotifier {
 
   List<Assignment> listAssignments = [];
 
+  int page = 1;
+  bool isLastPage = false;
+
   ListAssignmentRepository repository;
   ListAssignmentController(this.repository) {
     _getAssignments();
@@ -20,17 +23,12 @@ class ListAssignmentController extends ChangeNotifier {
   }
 
   Future<void> _getAssignments() async {
-    listAssignments.clear();
     setState(ListAssignmentState.loading);
 
     try {
       String token = await SharedPref().read('token');
-      ListResponse listClassBlockResp =
-          await repository.getListAssignments(token);
-
-      listClassBlockResp.data?.forEach((element) {
-        listAssignments.add(Assignment.fromJson(element));
-      });
+      ListResponse listAssignmentResp = await repository.getListAssignments(token, page);
+      setListAssignment(listAssignmentResp);
 
       setState(ListAssignmentState.success);
     } catch (e) {
@@ -56,6 +54,31 @@ class ListAssignmentController extends ChangeNotifier {
 
       throw Exception(e.toString());
     }
+  }
+
+  void setListAssignment(ListResponse listAssignmentResp) {
+    listAssignments.clear();
+    listAssignmentResp.data?.forEach((element) {
+      listAssignments.add(Assignment.fromJson(element));
+    });
+  }
+
+  void nextPage() {
+    isLastPage = listAssignments.length < 10;
+
+    if (isLastPage) {
+      return;
+    }
+    page++;
+    _getAssignments();
+  }
+
+  void backPage() {
+    if (page == 1) {
+      return;
+    }
+    page--;
+    _getAssignments();
   }
 
   void setState(ListAssignmentState state) {

@@ -69,9 +69,18 @@ class _ListClassPageState extends State<ListClassPage> {
             ],
           ),
           const SizedBox(height: 20),
-          SizedBox(
-            height: MediaQuery.of(context).size.height,
-            child: const ListClassWidget(),
+          const ListClassWidget(),
+          Row(
+            children: [
+              TextButton(
+                onPressed: () => controller.nextPage(),
+                child: const AlmaText(text: 'Anterior'),
+              ),
+              TextButton(
+                onPressed: () => controller.backPage(),
+                child: const AlmaText(text: 'Próximo'),
+              ),
+            ],
           ),
         ],
       ),
