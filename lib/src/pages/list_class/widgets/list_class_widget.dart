@@ -45,13 +45,27 @@ class ListClassWidget extends StatelessWidget {
               text: controller.listClasses[index].description!,
               fontWeight: FontWeight.w600,
             ),
-            trailing: AlmaButtonWidget(
-              onPressed: () => controller.deleteClass(
-                  controller.listClasses[index].description!, index),
-              height: 40,
-              width: 60,
-              color: AlmaTheme.secondaryColor,
-              child: const Icon(CupertinoIcons.delete),
+            trailing: SizedBox(
+              width: 100,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  IconButton(
+                    onPressed: () {},
+                    color: AlmaTheme.actionColor,
+                    icon: const Icon(Icons.more_outlined),
+                    tooltip: 'Detalhes',
+                  ),
+                  const SizedBox(width: 5),
+                  IconButton(
+                    onPressed: () => controller.deleteClass(controller.listClasses[index].description!, index),
+                    color: AlmaTheme.secondaryColor,
+                    icon: const Icon(CupertinoIcons.delete),
+                    tooltip: 'Apagar',
+                  ),
+                ],
+              ),
             ),
           ),
         ),

@@ -1,5 +1,6 @@
 import 'package:alma_web/src/controllers/list_class_block/list_class_block_controller.dart';
 import 'package:alma_web/src/controllers/list_class_block/list_class_block_state.dart';
+import 'package:alma_web/src/pages/list_class_block/widgets/list_class_block_widget.dart';
 import 'package:alma_web/src/routes/app_routes.dart';
 import 'package:alma_web/src/theme/alma_theme.dart';
 import 'package:alma_web/src/utils/snackbar.dart';
@@ -29,7 +30,8 @@ class _ListClassBlockPageState extends State<ListClassBlockPage> {
       if (controller.state == ListClassBlockState.error) {
         showSnackBar(context, 'Não foi possível carregar a lista de blocos!');
       } else if (controller.state == ListClassBlockState.success) {
-        showSnackBar(context, 'Lista carregada com sucesso!', durationMilli: 1000);
+        showSnackBar(context, 'Lista carregada com sucesso!',
+            durationMilli: 1000);
       }
     });
 
@@ -42,6 +44,7 @@ class _ListClassBlockPageState extends State<ListClassBlockPage> {
       title: 'ALMA',
       floatingActionButon: FloatingActionButton.extended(
         onPressed: () => controller.refresh(),
+        backgroundColor: Colors.green,
         label: const AlmaText(text: 'Recarregar'),
         icon: const Icon(Icons.refresh),
       ),
@@ -70,56 +73,7 @@ class _ListClassBlockPageState extends State<ListClassBlockPage> {
           const SizedBox(height: 20),
           SizedBox(
             height: MediaQuery.of(context).size.height,
-            child: Consumer<ListClassBlockController>(
-              builder: (context, value, child) {
-                if (value.state == ListClassBlockState.loading) {
-                  return const Center(
-                    child: CircularProgressIndicator(
-                      color: AlmaTheme.primaryColor,
-                    ),
-                  );
-                } else if (value.listClassBlock.isEmpty) {
-                  return const Center(
-                    child: AlmaText(
-                      text: 'Nenhum item encontrado na lista',
-                      fontSize: 22,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  );
-                } else {
-                  return ListView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: value.listClassBlock.length,
-                    itemBuilder: (context, index) => Card(
-                      color: AlmaTheme.greyAlmaColor,
-                      child: ListTile(
-                        title: AlmaText(
-                          text: value.listClassBlock[index].title!,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
-                        ),
-                        subtitle: AlmaText(
-                          text: value.listClassBlock[index].description!,
-                          fontWeight: FontWeight.w600,
-                        ),
-                        onTap: () {},
-                        trailing: AlmaButtonWidget(
-                          onPressed: () => value.deleteClassBlock(
-                            value.listClassBlock[index].id!,
-                            index,
-                          ),
-                          height: 40,
-                          width: 60,
-                          color: AlmaTheme.secondaryColor,
-                          child: const Icon(CupertinoIcons.delete),
-                        ),
-                      ),
-                    ),
-                  );
-                }
-              },
-            ),
+            child: const ListClassBlockWidget()
           ),
         ],
       ),

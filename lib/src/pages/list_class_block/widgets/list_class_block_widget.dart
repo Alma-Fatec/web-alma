@@ -1,25 +1,25 @@
-import 'package:alma_web/src/controllers/list_assignment/list_assignment_controller.dart';
-import 'package:alma_web/src/controllers/list_assignment/list_assignment_state.dart';
+import 'package:alma_web/src/controllers/list_class_block/list_class_block_controller.dart';
+import 'package:alma_web/src/controllers/list_class_block/list_class_block_state.dart';
 import 'package:alma_web/src/theme/alma_theme.dart';
 import 'package:alma_web/src/widgets/alma_text_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class ListAssignmentWidget extends StatelessWidget {
-  const ListAssignmentWidget({super.key});
+class ListClassBlockWidget extends StatelessWidget {
+  const ListClassBlockWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final controller = context.watch<ListAssignmentController>();
+    final controller = context.watch<ListClassBlockController>();
 
-    if (controller.state == ListAssignmentState.loading) {
+    if (controller.state == ListClassBlockState.loading) {
       return const Center(
         child: CircularProgressIndicator(
           color: AlmaTheme.primaryColor,
         ),
       );
-    } else if (controller.listAssignments.isEmpty) {
+    } else if (controller.listClassBlock.isEmpty) {
       return const Center(
         child: AlmaText(
           text: 'Nenhum item encontrado na lista',
@@ -31,17 +31,17 @@ class ListAssignmentWidget extends StatelessWidget {
       return ListView.builder(
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
-        itemCount: controller.listAssignments.length,
+        itemCount: controller.listClassBlock.length,
         itemBuilder: (context, index) => Card(
           color: AlmaTheme.greyAlmaColor,
           child: ListTile(
             title: AlmaText(
-              text: controller.listAssignments[index].title!,
+              text: controller.listClassBlock[index].title!,
               fontWeight: FontWeight.bold,
               fontSize: 18,
             ),
             subtitle: AlmaText(
-              text: controller.listAssignments[index].description!,
+              text: controller.listClassBlock[index].description!,
               fontWeight: FontWeight.w600,
             ),
             trailing: SizedBox(
@@ -58,7 +58,10 @@ class ListAssignmentWidget extends StatelessWidget {
                   ),
                   const SizedBox(width: 5),
                   IconButton(
-                    onPressed: () => controller.deleteAssignment(controller.listAssignments[index].id!),
+                    onPressed: () => controller.deleteClassBlock(
+                      controller.listClassBlock[index].id!,
+                      index,
+                    ),
                     color: AlmaTheme.secondaryColor,
                     icon: const Icon(CupertinoIcons.delete),
                     tooltip: 'Apagar',

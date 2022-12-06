@@ -27,7 +27,7 @@ class ListAssignmentRepository {
     return listResponses;
   }
 
-  Future<void> deleteAssignment(String token, String id) async {
+  Future<void> deleteAssignment(String token, int id) async {
     try {
       await client.delete(
         "/assignments/$id",

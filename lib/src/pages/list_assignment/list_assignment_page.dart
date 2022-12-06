@@ -40,6 +40,12 @@ class _ListAssignmentPageState extends State<ListAssignmentPage> {
   Widget build(BuildContext context) {
     return AlmaPageStructure(
       title: 'ALMA',
+      floatingActionButon: FloatingActionButton.extended(
+        onPressed: () => controller.refresh(),
+        backgroundColor: Colors.green,
+        label: const AlmaText(text: 'Recarregar'),
+        icon: const Icon(Icons.refresh),
+      ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [

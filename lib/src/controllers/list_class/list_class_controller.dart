@@ -14,6 +14,10 @@ class ListClassController extends ChangeNotifier {
     _getListClass();
   }
 
+  Future<void> refresh() async {
+    await _getListClass();
+  }
+
   Future<void> _getListClass() async {
     listClasses.clear();
     setState(ListClassState.loading);
@@ -22,11 +26,9 @@ class ListClassController extends ChangeNotifier {
       String token = await SharedPref().read('token');
       ListResponse listClassBlockResp = await repository.getListClasses(token);
 
-      if (listClasses.isEmpty) {
-        listClassBlockResp.data?.forEach((element) {
-          listClasses.add(Class.fromJson(element));
-        });
-      }
+      listClassBlockResp.data?.forEach((element) {
+        listClasses.add(Class.fromJson(element));
+      });
 
       setState(ListClassState.success);
     } catch (e) {

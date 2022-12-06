@@ -15,33 +15,32 @@ class ListAssignmentController extends ChangeNotifier {
     _getAssignments();
   }
 
+  Future<void> refresh() async {
+    await _getAssignments();
+  }
+
   Future<void> _getAssignments() async {
-    state = ListAssignmentState.loading;
-    notifyListeners();
+    listAssignments.clear();
+    setState(ListAssignmentState.loading);
 
     try {
-      listAssignments.clear();
       String token = await SharedPref().read('token');
       ListResponse listClassBlockResp =
           await repository.getListAssignments(token);
 
-      if (listAssignments.isEmpty) {
-        listClassBlockResp.data?.forEach((element) {
-          listAssignments.add(Assignment.fromJson(element));
-        });
-      }
+      listClassBlockResp.data?.forEach((element) {
+        listAssignments.add(Assignment.fromJson(element));
+      });
 
-      state = ListAssignmentState.success;
-      notifyListeners();
+      setState(ListAssignmentState.success);
     } catch (e) {
-      state = ListAssignmentState.error;
-      notifyListeners();
+      setState(ListAssignmentState.error);
 
       throw Exception(e.toString());
     }
   }
 
-  Future<void> deleteAssignment(String id) async {
+  Future<void> deleteAssignment(int id) async {
     state = ListAssignmentState.loading;
     notifyListeners();
 
@@ -57,5 +56,10 @@ class ListAssignmentController extends ChangeNotifier {
 
       throw Exception(e.toString());
     }
+  }
+
+  void setState(ListAssignmentState state) {
+    this.state = state;
+    notifyListeners();
   }
 }

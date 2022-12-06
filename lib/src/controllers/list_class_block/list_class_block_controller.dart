@@ -15,15 +15,12 @@ class ListClassBlockController extends ChangeNotifier {
   }
 
   Future<void> refresh() async {
-    _getListClassBlock();
+    await _getListClassBlock();
   }
 
   Future<void> _getListClassBlock() async {
     listClassBlock.clear();
-    notifyListeners();
-
     setState(ListClassBlockState.loading);
-
     try {
       String token = await SharedPref().read('token');
       ListResponse listClassBlockResp =
@@ -32,8 +29,7 @@ class ListClassBlockController extends ChangeNotifier {
       listClassBlockResp.data?.forEach((element) {
         listClassBlock.add(Block.fromJson(element));
       });
-      notifyListeners();
-
+    
       setState(ListClassBlockState.success);
     } catch (e) {
       setState(ListClassBlockState.error);
