@@ -14,17 +14,23 @@ class ListClassBlockWidget extends StatelessWidget {
     final controller = context.watch<ListClassBlockController>();
 
     if (controller.state == ListClassBlockState.loading) {
-      return const Center(
-        child: CircularProgressIndicator(
-          color: AlmaTheme.primaryColor,
+      return SizedBox(
+        height: MediaQuery.of(context).size.height / 1.4,
+        child: const Center(
+          child: CircularProgressIndicator(
+            color: AlmaTheme.primaryColor,
+          ),
         ),
       );
     } else if (controller.listClassBlock.isEmpty) {
-      return const Center(
-        child: AlmaText(
-          text: 'Nenhum item encontrado na lista',
-          fontSize: 22,
-          fontWeight: FontWeight.w500,
+      return SizedBox(
+        height: MediaQuery.of(context).size.height / 1.4,
+        child: const Center(
+          child: AlmaText(
+            text: 'Nenhum item encontrado na lista',
+            fontSize: 22,
+            fontWeight: FontWeight.w500,
+          ),
         ),
       );
     } else {

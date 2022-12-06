@@ -1,19 +1,20 @@
-import 'package:alma_web/src/controllers/list_assignment/list_assignment_controller.dart';
-import 'package:alma_web/src/controllers/list_assignment/list_assignment_state.dart';
+import 'package:alma_web/src/controllers/user/user_controller.dart';
+import 'package:alma_web/src/controllers/user/user_state.dart';
 import 'package:alma_web/src/theme/alma_theme.dart';
+import 'package:alma_web/src/widgets/alma_button_widget.dart';
 import 'package:alma_web/src/widgets/alma_text_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class ListAssignmentWidget extends StatelessWidget {
-  const ListAssignmentWidget({super.key});
+class ListUsersWidget extends StatelessWidget {
+  const ListUsersWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final controller = context.watch<ListAssignmentController>();
+    final controller = context.watch<UserController>();
 
-    if (controller.state == ListAssignmentState.loading) {
+    if (controller.state == UserState.loading) {
       return SizedBox(
         height: MediaQuery.of(context).size.height / 1.4,
         child: const Center(
@@ -22,7 +23,7 @@ class ListAssignmentWidget extends StatelessWidget {
           ),
         ),
       );
-    } else if (controller.listAssignments.isEmpty) {
+    } else if (controller.users.isEmpty) {
       return SizedBox(
         height: MediaQuery.of(context).size.height / 1.4,
         child: const Center(
@@ -37,17 +38,17 @@ class ListAssignmentWidget extends StatelessWidget {
       return ListView.builder(
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
-        itemCount: controller.listAssignments.length,
+        itemCount: controller.users.length,
         itemBuilder: (context, index) => Card(
           color: AlmaTheme.greyAlmaColor,
           child: ListTile(
             title: AlmaText(
-              text: controller.listAssignments[index].title!,
+              text: controller.users[index].name!,
               fontWeight: FontWeight.bold,
               fontSize: 18,
             ),
             subtitle: AlmaText(
-              text: controller.listAssignments[index].description!,
+              text: controller.users[index].email!,
               fontWeight: FontWeight.w600,
             ),
             trailing: SizedBox(
@@ -64,7 +65,10 @@ class ListAssignmentWidget extends StatelessWidget {
                   ),
                   const SizedBox(width: 5),
                   IconButton(
-                    onPressed: () => controller.deleteAssignment(controller.listAssignments[index].id!),
+                    onPressed: () {}, /* => controller.(
+                      controller.listClassBlock[index].id!,
+                      index,
+                    ), */
                     color: AlmaTheme.secondaryColor,
                     icon: const Icon(CupertinoIcons.delete),
                     tooltip: 'Apagar',

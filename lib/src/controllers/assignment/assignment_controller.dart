@@ -60,7 +60,7 @@ class AssignmentController extends ChangeNotifier {
       files.add(file);
       notifyListeners();
     } catch (e) {
-      throw Exception(e.toString());
+      Exception(e.toString());
     }
   }
 
