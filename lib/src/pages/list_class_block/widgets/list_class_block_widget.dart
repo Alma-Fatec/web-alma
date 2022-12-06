@@ -1,5 +1,6 @@
 import 'package:alma_web/src/controllers/list_class_block/list_class_block_controller.dart';
 import 'package:alma_web/src/controllers/list_class_block/list_class_block_state.dart';
+import 'package:alma_web/src/routes/app_routes.dart';
 import 'package:alma_web/src/theme/alma_theme.dart';
 import 'package:alma_web/src/widgets/alma_text_widget.dart';
 import 'package:flutter/cupertino.dart';
@@ -57,7 +58,11 @@ class ListClassBlockWidget extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   IconButton(
-                    onPressed: () {},
+                    onPressed: () => Navigator.pushNamed(
+                      context,
+                      Routes.detailClassBlock,
+                      arguments: controller.listClassBlock[index],
+                    ),
                     color: AlmaTheme.actionColor,
                     icon: const Icon(Icons.more_outlined),
                     tooltip: 'Detalhes',

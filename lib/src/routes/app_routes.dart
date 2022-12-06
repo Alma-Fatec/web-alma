@@ -10,4 +10,8 @@ abstract class Routes {
   static const String listClasses = '/listClasses';
   static const String profile = '/profile';
   static const String listUsers = '/listUsers';
+  static const String detailAssignment = '/detailAssignment';
+  static const String detailClass = '/detailClass';
+  static const String detailClassBlock = '/detailClassBlock';
+  
 }

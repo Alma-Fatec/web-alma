@@ -29,7 +29,7 @@ class _ListClassPageState extends State<ListClassPage> {
       if (controller.state == ListClassState.error) {
         showSnackBar(context, 'Não foi possível carregar a lista de aulas!');
       } else if (controller.state == ListClassState.success) {
-        showSnackBar(context, 'Lista carregada com sucesso!');
+        showSnackBar(context, 'Lista carregada com sucesso!', durationMilli: 1000);
       }
     });
 

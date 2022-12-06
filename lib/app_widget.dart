@@ -27,8 +27,11 @@ import 'package:alma_web/src/pages/class/class_page.dart';
 import 'package:alma_web/src/pages/class_block/class_block_page.dart';
 import 'package:alma_web/src/pages/dashboard/dashboard_page.dart';
 import 'package:alma_web/src/pages/list_assignment/list_assignment_page.dart';
+import 'package:alma_web/src/pages/list_assignment/widgets/detail_assignment.dart';
 import 'package:alma_web/src/pages/list_class/list_class_page.dart';
+import 'package:alma_web/src/pages/list_class/widgets/detail_class.dart';
 import 'package:alma_web/src/pages/list_class_block/list_class_block_page.dart';
+import 'package:alma_web/src/pages/list_class_block/widgets/detail_class_block.dart';
 import 'package:alma_web/src/pages/profile/profile_page.dart';
 import 'package:alma_web/src/pages/register/register_page.dart';
 import 'package:alma_web/src/pages/user/list_users_page.dart';
@@ -56,21 +59,18 @@ class AppWidget extends StatelessWidget {
     return MultiProvider(
       providers: [
         // Auth injects
-        Provider(create: (_) => Auth()),
-        Provider(create: (context) => AuthRepository(context.read(), client)),
+        Provider(create: (_) => AuthRepository(Auth(), client)),
         ChangeNotifierProvider(create: (context) => AuthController(context.read<AuthRepository>())),
 
         // Register injects
-        Provider(create: (_) => User()),
-        Provider(create: (context) => RegisterRepository(context.read(), client)),
+        Provider(create: (_) => RegisterRepository(User(), client)),
         ChangeNotifierProvider(create: (context) => RegisterController(context.read<RegisterRepository>())),
 
         // Dashboard Injects
         ChangeNotifierProvider(create: (context) => DashboardController()),
 
         // List blocks injects
-        Provider(create: (_) => ListResponse()),
-        Provider(create: (context) => ListClassBlockRepository(context.read(), client)),
+        Provider(create: (_) => ListClassBlockRepository(ListResponse(), client)),
         ChangeNotifierProvider(create: (context) => ListClassBlockController(context.read<ListClassBlockRepository>())),
 
         // Class blocks injects
@@ -84,8 +84,7 @@ class AppWidget extends StatelessWidget {
         ),
 
         // List assignment injects
-        Provider(create: (_) => ListResponse()),
-        Provider(create: (context) => ListAssignmentRepository(context.read(), client)),
+        Provider(create: (_) => ListAssignmentRepository(ListResponse(), client)),
         ChangeNotifierProvider(create: (context) => ListAssignmentController(context.read<ListAssignmentRepository>())),
 
         // Assignment injects
@@ -99,8 +98,7 @@ class AppWidget extends StatelessWidget {
         ),
 
         // List classes injects
-        Provider(create: (_) => ListResponse()),
-        Provider(create: (context) => ListClassRepository(context.read(), client)),
+        Provider(create: (context) => ListClassRepository(ListResponse(), client)),
         ChangeNotifierProvider(create: (context) => ListClassController(context.read<ListClassRepository>())),
 
         // Class injects
@@ -114,11 +112,10 @@ class AppWidget extends StatelessWidget {
         ),
 
         // Profile injects
-        Provider(create: (_) => User()),
-        ChangeNotifierProvider(create: (context) => ProfileController(context.read<User>())),
+        ChangeNotifierProvider(create: (context) => ProfileController(User())),
 
         // List users injects
-        Provider(create: (context) => UserRepository(client)),
+        Provider(create: (_) => UserRepository(client)),
         ChangeNotifierProvider(create: (context) => UserController(context.read<UserRepository>())),
       ],
       child: MaterialApp(
@@ -138,6 +135,9 @@ class AppWidget extends StatelessWidget {
           Routes.classes: (context) => const ClassPage(),
           Routes.profile: (context) => const ProfilePage(),
           Routes.listUsers: (context) => const ListUsersPage(),
+          Routes.detailAssignment: (context) => const DetailAssignment(),
+          Routes.detailClass: (context) => const DetailClass(), 
+          Routes.detailClassBlock: (context) => const DetailClassBlock(), 
         },
       ),
     );

@@ -1,5 +1,6 @@
 import 'package:alma_web/src/controllers/list_class/list_class_controller.dart';
 import 'package:alma_web/src/controllers/list_class/list_class_state.dart';
+import 'package:alma_web/src/routes/app_routes.dart';
 import 'package:alma_web/src/theme/alma_theme.dart';
 import 'package:alma_web/src/widgets/alma_text_widget.dart';
 import 'package:flutter/cupertino.dart';
@@ -57,14 +58,19 @@ class ListClassWidget extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   IconButton(
-                    onPressed: () {},
+                    onPressed: () => Navigator.pushNamed(
+                      context,
+                      Routes.detailClass,
+                      arguments: controller.listClasses[index],
+                    ),
                     color: AlmaTheme.actionColor,
                     icon: const Icon(Icons.more_outlined),
                     tooltip: 'Detalhes',
                   ),
                   const SizedBox(width: 5),
                   IconButton(
-                    onPressed: () => controller.deleteClass(controller.listClasses[index].description!, index),
+                    onPressed: () => controller.deleteClass(
+                        controller.listClasses[index].description!, index),
                     color: AlmaTheme.secondaryColor,
                     icon: const Icon(CupertinoIcons.delete),
                     tooltip: 'Apagar',
