@@ -49,7 +49,7 @@ class CustomInterceptors extends InterceptorsWrapper {
 
   Future<bool> _refresh() async {
     try {
-      User user = User.fromJson(json.decode(await SharedPref().read('user_id')));
+      User user = User.fromJson(json.decode(await SharedPref().read('user')));
       final response = await dio.post(
         '/session/refresh',
         data: { "user_id": user.id }
