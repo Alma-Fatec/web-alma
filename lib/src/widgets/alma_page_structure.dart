@@ -23,7 +23,7 @@ class AlmaPageStructure extends StatelessWidget {
           ),
         ),
         leadingWidth: 110,
-        title: AlmaText(text: title),
+        title: AlmaText(text: title, fontSize: 26),
         actions: actions
       ),
       body: Row(
