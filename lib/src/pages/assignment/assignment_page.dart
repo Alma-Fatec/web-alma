@@ -79,6 +79,7 @@ class _AssignmentPageState extends State<AssignmentPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   AlmaTextField(
+                    controller: _ctrlTitulo,
                     label: 'Titulo da atividade',
                     hintText: 'Digite um titulo',
                     labelColor: AlmaTheme.blackAlmaColor,
