@@ -7,12 +7,15 @@ class UserRepository {
 
   UserRepository(this.client);
 
-  Future<List<User>> getAllUsers(String token) async {
+  Future<List<User>> getAllUsers(String token, int page) async {
     List<User> users = [];
 
     try {
       final response = await client.get(
         "/users",
+        queryParameters: {
+          "page": page,
+        },
         options: Options(
           headers: {
             "Authorization": "Bearer $token",

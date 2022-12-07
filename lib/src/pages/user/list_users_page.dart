@@ -1,10 +1,7 @@
 import 'package:alma_web/src/controllers/user/user_controller.dart';
 import 'package:alma_web/src/controllers/user/user_state.dart';
 import 'package:alma_web/src/pages/user/widgets/list_users_widget.dart';
-import 'package:alma_web/src/routes/app_routes.dart';
-import 'package:alma_web/src/theme/alma_theme.dart';
 import 'package:alma_web/src/utils/snackbar.dart';
-import 'package:alma_web/src/widgets/alma_button_widget.dart';
 import 'package:alma_web/src/widgets/alma_page_structure.dart';
 import 'package:alma_web/src/widgets/alma_text_field.dart';
 import 'package:alma_web/src/widgets/alma_text_widget.dart';
@@ -46,21 +43,22 @@ class _ListUsersPageState extends State<ListUsersPage> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const SizedBox(
+              SizedBox(
                 width: 400,
                 child: AlmaTextField(
                   hintText: 'Pesquisar alunos',
-                  prefixIcon: Icon(Icons.search),
+                  prefixIcon: const Icon(Icons.search),
+                  onChanged: (query) => controller.filterSearchResults(query),
                 ),
               ),
-              AlmaButtonWidget(
+              /* AlmaButtonWidget(
                 onPressed: () =>
                     Navigator.pushNamed(context, Routes.newAssignment),
                 iconData: Icons.add_circle_outline,
                 color: AlmaTheme.primaryColor,
                 width: 220,
                 child: const AlmaText(text: 'Cadastrar aluno'),
-              )
+              ) */
             ],
           ),
           const SizedBox(height: 20),
@@ -69,11 +67,11 @@ class _ListUsersPageState extends State<ListUsersPage> {
           Row(
             children: [
               TextButton(
-                onPressed: () {},
+                onPressed: () => controller.backPage(),
                 child: const AlmaText(text: 'Anterior'),
               ),
               TextButton(
-                onPressed: () {},
+                onPressed: () => controller.nextPage(),
                 child: const AlmaText(text: 'Próximo'),
               ),
             ],

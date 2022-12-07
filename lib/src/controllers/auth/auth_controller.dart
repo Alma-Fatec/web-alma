@@ -38,8 +38,8 @@ class AuthController extends ChangeNotifier {
   Future<void> authAction() async {
     setState(AuthState.authenticanting);
     try {
-      String token = await SharedPref().read('token');
-      Auth auth = await authRepository.authRequest(email, password, token);
+      String? token = await SharedPref().read('token');
+      Auth auth = await authRepository.authRequest(email, password, token ?? '');
 
       if (auth.token == null) {
         setMessage(

@@ -1,3 +1,3 @@
 enum UserState {
-  idle, loading, success, error
+  idle, loading, success, error, successDelete, errorDelete
 }

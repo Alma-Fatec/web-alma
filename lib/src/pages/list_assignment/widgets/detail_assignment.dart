@@ -31,11 +31,6 @@ class DetailAssignment extends StatelessWidget {
               fontSize: 16,
               fontWeight: FontWeight.w500,
             ),
-            AlmaText(
-                text: assignment.name ?? 'Sem nome',
-                fontSize: 16,
-                color: Colors.black54,
-                fontWeight: FontWeight.w500),
           ],
         ),
       ),

@@ -29,7 +29,7 @@ class _ListAssignmentPageState extends State<ListAssignmentPage> {
       if (controller.state == ListAssignmentState.error) {
         showSnackBar(context, 'Não foi possível carregar a lista de atividades!');
       } else if (controller.state == ListAssignmentState.success) {
-        showSnackBar(context, 'Lista carregada com sucesso!');
+        showSnackBar(context, 'Lista carregada com sucesso!', durationMilli: 1000);
       }
     });
 
@@ -52,11 +52,12 @@ class _ListAssignmentPageState extends State<ListAssignmentPage> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const SizedBox(
+              SizedBox(
                 width: 400,
                 child: AlmaTextField(
                   hintText: 'Pesquisar atividade',
-                  prefixIcon: Icon(Icons.search),
+                  prefixIcon: const Icon(Icons.search),
+                  onChanged: (query) => controller.filterSearchResults(query),
                 ),
               ),
               AlmaButtonWidget(
@@ -75,11 +76,11 @@ class _ListAssignmentPageState extends State<ListAssignmentPage> {
           Row(
             children: [
               TextButton(
-                onPressed: () => controller.nextPage(),
+                onPressed: () => controller.backPage(),
                 child: const AlmaText(text: 'Anterior'),
               ),
               TextButton(
-                onPressed: () => controller.backPage(),
+                onPressed: () => controller.nextPage(),
                 child: const AlmaText(text: 'Próximo'),
               ),
             ],

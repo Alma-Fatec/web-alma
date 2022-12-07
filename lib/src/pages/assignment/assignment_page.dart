@@ -1,6 +1,10 @@
 import 'package:alma_web/src/controllers/assignment/assignment_controller.dart';
 import 'package:alma_web/src/controllers/assignment/assignment_sate.dart';
-import 'package:alma_web/src/pages/assignment/widgets/files_picked_list.dart';
+import 'package:alma_web/src/pages/assignment/widgets/dialog_add_option.dart';
+import 'package:alma_web/src/pages/assignment/widgets/dialog_select_class.dart';
+import 'package:alma_web/src/pages/assignment/widgets/dropdown_assignment_type.dart';
+import 'package:alma_web/src/pages/assignment/widgets/list_class_selected.dart';
+import 'package:alma_web/src/pages/assignment/widgets/list_options_assignments.dart';
 import 'package:alma_web/src/routes/app_routes.dart';
 import 'package:alma_web/src/theme/alma_theme.dart';
 import 'package:alma_web/src/utils/snackbar.dart';
@@ -21,9 +25,9 @@ class AssignmentPage extends StatefulWidget {
 
 class _AssignmentPageState extends State<AssignmentPage> {
   late AssignmentController controller;
-  final TextEditingController _ctrlNome = TextEditingController();
   final TextEditingController _ctrlTitulo = TextEditingController();
   final TextEditingController _ctrlDescricao = TextEditingController();
+  final TextEditingController _ctrlAnswer = TextEditingController();
 
   @override
   void initState() {
@@ -34,14 +38,15 @@ class _AssignmentPageState extends State<AssignmentPage> {
         showSnackBar(context, 'Não foi possível salvar a atividade!');
       } else if (controller.state == AssignmentState.success) {
         clearFields();
-        showSnackBar(context, 'Atividade salva com sucesso!', durationMilli: 1000);
+        showSnackBar(context, 'Atividade salva com sucesso!',
+            durationMilli: 1000);
       }
     });
     super.initState();
   }
 
   void clearFields() {
-    _ctrlNome.clear();
+    _ctrlAnswer.clear();
     _ctrlTitulo.clear();
     _ctrlDescricao.clear();
   }
@@ -79,38 +84,34 @@ class _AssignmentPageState extends State<AssignmentPage> {
                     labelColor: AlmaTheme.blackAlmaColor,
                     onChanged: (value) => controller.title = value,
                   ),
+                  
                   const SizedBox(height: 12),
-                  AlmaTextField(
-                    label: 'Nome da atividade',
-                    hintText: 'Digite um nome',
-                    labelColor: AlmaTheme.blackAlmaColor,
-                    onChanged: (value) => controller.name = value,
-                  ),
-                  const SizedBox(height: 12),
-                  AlmaTextField(
-                    label: 'Descrição',
-                    hintText: 'Descreva a atividade',
-                    maxLines: 7,
-                    labelColor: AlmaTheme.blackAlmaColor,
-                    onChanged: (value) => controller.description = value,
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(width: 20),
-            Flexible(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
                   AlmaButtonWidget(
-                    onPressed: () => controller.pickFiles(),
-                    color: AlmaTheme.primaryColor,
-                    iconData: Icons.folder_copy_outlined,
-                    child: const AlmaText(text: 'Selecionar arquivo'),
+                    width: 290,
+                    onPressed: () => _openDialogCreateOptions(),
+                    color: AlmaTheme.secondaryColor,
+                    iconData: Icons.add_circle_outline,
+                    child: const AlmaText(text: "Adicionar alternativa"),
                   ),
-                  const SizedBox(height: 12),
-                  const FilesPickedList(),
+                  const SizedBox(height: 10),
+                  const ListOptionsAssignments(),
+                  
+                  const SizedBox(height: 18),
+                  AlmaButtonWidget(
+                    width: 290,
+                    onPressed: () => _openDialogClasses(),
+                    color: AlmaTheme.actionColor,
+                    iconData: Icons.add_circle_outline,
+                    child: const AlmaText(text: "Adicionar aula"),
+                  ),
+                  const SizedBox(height: 10),
+                  const ListClassSelected(),
+                  
+                  const SizedBox(height: 18),
+                  DropdownAssignmentType(
+                    ctrlAnswer: _ctrlAnswer,
+                    ctrlDescricao: _ctrlDescricao,
+                  ),
                 ],
               ),
             ),
@@ -118,5 +119,15 @@ class _AssignmentPageState extends State<AssignmentPage> {
         ),
       ),
     );
+  }
+
+  void _openDialogClasses() {
+    showDialog(
+        context: context, builder: (context) => const DialogSelectClass());
+  }
+
+  void _openDialogCreateOptions() {
+    showDialog(
+        context: context, builder: (context) => DialogAddOption());
   }
 }

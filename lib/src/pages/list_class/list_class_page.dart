@@ -52,11 +52,12 @@ class _ListClassPageState extends State<ListClassPage> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const SizedBox(
+              SizedBox(
                 width: 400,
                 child: AlmaTextField(
                   hintText: 'Pesquisar aula',
-                  prefixIcon: Icon(Icons.search),
+                  prefixIcon: const Icon(Icons.search),
+                  onChanged: (query) => controller.filterSearchResults(query),
                 ),
               ),
               AlmaButtonWidget(
@@ -73,11 +74,11 @@ class _ListClassPageState extends State<ListClassPage> {
           Row(
             children: [
               TextButton(
-                onPressed: () => controller.nextPage(),
+                onPressed: () => controller.backPage(),
                 child: const AlmaText(text: 'Anterior'),
               ),
               TextButton(
-                onPressed: () => controller.backPage(),
+                onPressed: () => controller.nextPage(),
                 child: const AlmaText(text: 'Próximo'),
               ),
             ],

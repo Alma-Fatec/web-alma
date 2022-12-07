@@ -89,7 +89,7 @@ class AppWidget extends StatelessWidget {
 
         // Assignment injects
         Provider(create: (_) => FilePickerUtil()),
-        Provider(create: (_) => AssignmentRepository(client)),
+        Provider(create: (_) => AssignmentRepository(client, ListResponse())),
         ChangeNotifierProvider(
           create: (context) => AssignmentController(
             context.read<AssignmentRepository>(),
@@ -98,7 +98,7 @@ class AppWidget extends StatelessWidget {
         ),
 
         // List classes injects
-        Provider(create: (context) => ListClassRepository(ListResponse(), client)),
+        Provider(create: (_) => ListClassRepository(ListResponse(), client)),
         ChangeNotifierProvider(create: (context) => ListClassController(context.read<ListClassRepository>())),
 
         // Class injects

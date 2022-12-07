@@ -8,6 +8,7 @@ import 'package:flutter/widgets.dart';
 class ListClassBlockController extends ChangeNotifier {
   var state = ListClassBlockState.idle;
   List<Block> listClassBlock = [];
+  List<Block> listClassBlockAux = [];
 
   int page = 1;
   bool isLastPage = false;
@@ -25,7 +26,8 @@ class ListClassBlockController extends ChangeNotifier {
     setState(ListClassBlockState.loading);
     try {
       String token = await SharedPref().read('token');
-      ListResponse listClassBlockResp = await repository.getListClassBlock(token, page);
+      ListResponse listClassBlockResp =
+          await repository.getListClassBlock(token, page);
 
       setListClassBlock(listClassBlockResp);
 
@@ -55,13 +57,42 @@ class ListClassBlockController extends ChangeNotifier {
 
   void setListClassBlock(ListResponse listClassBlockResp) {
     listClassBlock.clear();
+    listClassBlockAux.clear();
+
     listClassBlockResp.data?.forEach((element) {
-      listClassBlock.add(Block.fromJson(element));
+      listClassBlockAux.add(Block.fromJson(element));
     });
+
+    listClassBlock.addAll(listClassBlockAux);
+  }
+
+  void filterSearchResults(String query) {
+    setState(ListClassBlockState.idle);
+
+    List<Block> dummySearchList = [];
+    dummySearchList.addAll(listClassBlockAux);
+
+    if (query.isNotEmpty) {
+      List<Block> dummyListData = [];
+      for (Block item in dummySearchList) {
+        if (item.title!.contains(query)) {
+          dummyListData.add(item);
+          notifyListeners();
+        }
+      }
+      listClassBlock.clear();
+      listClassBlock.addAll(dummyListData);
+      notifyListeners();
+      return;
+    } else {
+      listClassBlock.clear();
+      listClassBlock.addAll(listClassBlockAux);
+      notifyListeners();
+    }
   }
 
   void nextPage() {
-    isLastPage = listClassBlock.length < 10;
+    isLastPage = listClassBlockAux.length < 10;
 
     if (isLastPage) {
       return;

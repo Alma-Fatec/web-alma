@@ -1,9 +1,7 @@
 import 'package:alma_web/src/controllers/user/user_controller.dart';
 import 'package:alma_web/src/controllers/user/user_state.dart';
 import 'package:alma_web/src/theme/alma_theme.dart';
-import 'package:alma_web/src/widgets/alma_button_widget.dart';
 import 'package:alma_web/src/widgets/alma_text_widget.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -51,31 +49,7 @@ class ListUsersWidget extends StatelessWidget {
               text: controller.users[index].email!,
               fontWeight: FontWeight.w600,
             ),
-            trailing: SizedBox(
-              width: 100,
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  IconButton(
-                    onPressed: () {},
-                    color: AlmaTheme.actionColor,
-                    icon: const Icon(Icons.more_outlined),
-                    tooltip: 'Detalhes',
-                  ),
-                  const SizedBox(width: 5),
-                  IconButton(
-                    onPressed: () {}, /* => controller.(
-                      controller.listClassBlock[index].id!,
-                      index,
-                    ), */
-                    color: AlmaTheme.secondaryColor,
-                    icon: const Icon(CupertinoIcons.delete),
-                    tooltip: 'Apagar',
-                  ),
-                ],
-              ),
-            ),
+            trailing: const Icon(Icons.arrow_right_outlined)
           ),
         ),
       );

@@ -53,11 +53,12 @@ class _ListClassBlockPageState extends State<ListClassBlockPage> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const SizedBox(
+              SizedBox(
                 width: 400,
                 child: AlmaTextField(
                   hintText: 'Pesquisar bloco de aula',
-                  prefixIcon: Icon(Icons.search),
+                  prefixIcon: const Icon(Icons.search),
+                  onChanged: (query) => controller.filterSearchResults(query),
                 ),
               ),
               AlmaButtonWidget(
@@ -75,11 +76,11 @@ class _ListClassBlockPageState extends State<ListClassBlockPage> {
           Row(
             children: [
               TextButton(
-                onPressed: () => controller.nextPage(),
+                onPressed: () => controller.backPage(),
                 child: const AlmaText(text: 'Anterior'),
               ),
               TextButton(
-                onPressed: () => controller.backPage(),
+                onPressed: () => controller.nextPage(),
                 child: const AlmaText(text: 'Próximo'),
               ),
             ],

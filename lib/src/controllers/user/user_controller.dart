@@ -8,8 +8,12 @@ import 'package:flutter/widgets.dart';
 
 class UserController extends ChangeNotifier {
   List<User> users = [];
-  
+  List<User> usersAux = [];
+
   var state = UserState.idle;
+
+  int page = 1;
+  bool isLastPage = false;
 
   UserRepository repository;
   UserController(this.repository) {
@@ -25,8 +29,9 @@ class UserController extends ChangeNotifier {
 
       if (user.role == "Student") return;
 
-      users = await repository.getAllUsers(token);
-      users = users.where((element) => element.role == 'Student').toList();
+      usersAux = await repository.getAllUsers(token, page);
+      usersAux = usersAux.where((element) => element.role == 'Student').toList();
+      users.addAll(usersAux);
 
       setState(UserState.success);
     } catch (e) {
@@ -35,8 +40,52 @@ class UserController extends ChangeNotifier {
     }
   }
 
+  void filterSearchResults(String query) {
+    setState(UserState.idle);
+
+    List<User> dummySearchList = [];
+    dummySearchList.addAll(usersAux);
+
+    if (query.isNotEmpty) {
+      List<User> dummyListData = [];
+      for (User item in dummySearchList) {
+        if (item.name!.contains(query)) {
+          dummyListData.add(item);
+          notifyListeners();
+        }
+      }
+      users.clear();
+      users.addAll(dummyListData);
+      notifyListeners();
+      return;
+    } else {
+      users.clear();
+      users.addAll(usersAux);
+      notifyListeners();
+    }
+  }
+
   void setState(UserState state) {
     this.state = state;
     notifyListeners();
   }
+
+  void nextPage() {
+    isLastPage = usersAux.length < 10;
+
+    if (isLastPage) {
+      return;
+    }
+    page++;
+    _getAllStudents();
+  }
+
+  void backPage() {
+    if (page == 1) {
+      return;
+    }
+    page--;
+    _getAllStudents();
+  }
+
 }

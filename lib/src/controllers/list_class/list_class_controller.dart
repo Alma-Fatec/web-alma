@@ -8,6 +8,7 @@ import 'package:flutter/widgets.dart';
 class ListClassController extends ChangeNotifier {
   var state = ListClassState.idle;
   List<Class> listClasses = [];
+  List<Class> classListAux = [];
 
   int page = 1;
   bool isLastPage = false;
@@ -54,14 +55,18 @@ class ListClassController extends ChangeNotifier {
   }
 
   void setListClass(ListResponse listClassResp) {
+    classListAux.clear();
     listClasses.clear();
+    
     listClassResp.data?.forEach((element) {
-      listClasses.add(Class.fromJson(element));
+      classListAux.add(Class.fromJson(element));
     });
+
+    listClasses.addAll(classListAux);
   }
 
   void nextPage() {
-    isLastPage = listClasses.length < 10;
+    isLastPage = classListAux.length < 10;
 
     if (isLastPage) {
       return;
@@ -81,5 +86,30 @@ class ListClassController extends ChangeNotifier {
   void setState(ListClassState state) {
     this.state = state;
     notifyListeners();
+  }
+
+  void filterSearchResults(String query) {
+    setState(ListClassState.idle);
+
+    List<Class> dummySearchList = [];
+    dummySearchList.addAll(classListAux);
+
+    if (query.isNotEmpty) {
+      List<Class> dummyListData = [];
+      for (Class item in dummySearchList) {
+        if (item.name!.contains(query)) {
+          dummyListData.add(item);
+          notifyListeners();
+        }
+      }
+      listClasses.clear();
+      listClasses.addAll(dummyListData);
+      notifyListeners();
+      return;
+    } else {
+      listClasses.clear();
+      listClasses.addAll(classListAux);
+      notifyListeners();
+    }
   }
 }
