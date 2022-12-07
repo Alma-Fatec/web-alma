@@ -8,54 +8,109 @@ import 'package:flutter/widgets.dart';
 class ListClassBlockController extends ChangeNotifier {
   var state = ListClassBlockState.idle;
   List<Block> listClassBlock = [];
+  List<Block> listClassBlockAux = [];
+
+  int page = 1;
+  bool isLastPage = false;
 
   ListClassBlockRepository repository;
   ListClassBlockController(this.repository) {
     _getListClassBlock();
   }
 
-  Future<void> _getListClassBlock() async {
-    listClassBlock.clear();
-    state = ListClassBlockState.loading;
-    notifyListeners();
+  Future<void> refresh() async {
+    await _getListClassBlock();
+  }
 
+  Future<void> _getListClassBlock() async {
+    setState(ListClassBlockState.loading);
     try {
       String token = await SharedPref().read('token');
       ListResponse listClassBlockResp =
-          await repository.getListClassBlock(token);
+          await repository.getListClassBlock(token, page);
 
-      if (listClassBlock.isEmpty) {
-        listClassBlockResp.data?.forEach((element) {
-          listClassBlock.add(Block.fromJson(element));
-        });
-      }
+      setListClassBlock(listClassBlockResp);
 
-      state = ListClassBlockState.success;
-      notifyListeners();
+      setState(ListClassBlockState.success);
     } catch (e) {
-      state = ListClassBlockState.error;
-      notifyListeners();
+      setState(ListClassBlockState.error);
 
-      throw Exception(e.toString());
+      Exception(e.toString());
     }
   }
 
   Future<void> deleteClassBlock(String id, int index) async {
-    state = ListClassBlockState.loading;
-    notifyListeners();
+    setState(ListClassBlockState.loading);
 
     try {
       String token = await SharedPref().read("token");
       await repository.deleteClassBlock(token, id);
-      
-      listClassBlock.removeAt(index);
-      state = ListClassBlockState.successDelete;
-      notifyListeners();
-    } catch (e) {
-      state = ListClassBlockState.errorDelete;
-      notifyListeners();
 
-      throw Exception(e.toString());
+      listClassBlock.removeAt(index);
+      setState(ListClassBlockState.successDelete);
+    } catch (e) {
+      setState(ListClassBlockState.errorDelete);
+
+      Exception(e.toString());
     }
+  }
+
+  void setListClassBlock(ListResponse listClassBlockResp) {
+    listClassBlock.clear();
+    listClassBlockAux.clear();
+
+    listClassBlockResp.data?.forEach((element) {
+      listClassBlockAux.add(Block.fromJson(element));
+    });
+
+    listClassBlock.addAll(listClassBlockAux);
+  }
+
+  void filterSearchResults(String query) {
+    setState(ListClassBlockState.idle);
+
+    List<Block> dummySearchList = [];
+    dummySearchList.addAll(listClassBlockAux);
+
+    if (query.isNotEmpty) {
+      List<Block> dummyListData = [];
+      for (Block item in dummySearchList) {
+        if (item.title!.contains(query)) {
+          dummyListData.add(item);
+          notifyListeners();
+        }
+      }
+      listClassBlock.clear();
+      listClassBlock.addAll(dummyListData);
+      notifyListeners();
+      return;
+    } else {
+      listClassBlock.clear();
+      listClassBlock.addAll(listClassBlockAux);
+      notifyListeners();
+    }
+  }
+
+  void nextPage() {
+    isLastPage = listClassBlockAux.length < 10;
+
+    if (isLastPage) {
+      return;
+    }
+    page++;
+    _getListClassBlock();
+  }
+
+  void backPage() {
+    if (page == 1) {
+      return;
+    }
+    page--;
+    _getListClassBlock();
+  }
+
+  void setState(ListClassBlockState state) {
+    this.state = state;
+    notifyListeners();
   }
 }

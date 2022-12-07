@@ -1,6 +1,5 @@
 import 'package:alma_web/src/controllers/auth/auth_controller.dart';
 import 'package:alma_web/src/controllers/auth/auth_sate.dart';
-import 'package:alma_web/src/data/models/auth/auth_model.dart';
 import 'package:alma_web/src/theme/alma_theme.dart';
 import 'package:alma_web/src/widgets/alma_button_widget.dart';
 import 'package:alma_web/src/widgets/alma_text_widget.dart';
@@ -19,7 +18,7 @@ class AuthButton extends StatelessWidget {
       color: AlmaTheme.primaryColor,
       child: controller.state == AuthState.authenticanting
           ? const CircularProgressIndicator(color: Colors.white)
-          : const AlmaTextWidget(text: 'Entrar', color: Colors.white, fontWeight: FontWeight.bold),
+          : const AlmaText(text: 'Entrar', color: Colors.white, fontWeight: FontWeight.bold),
     );
   }
 }

@@ -20,13 +20,13 @@ class SidebarWidget extends StatelessWidget {
             const SizedBox(height: 50),
             Image.asset('assets/images/logo_alma.png'),
             const SizedBox(height: 30),
-            const AlmaTextWidget(
+            const AlmaText(
               text: 'ALMA WEB',
               fontSize: 24,
               fontWeight: FontWeight.w600,
               color: AlmaTheme.primaryColor,
             ),
-            const AlmaTextWidget(
+            const AlmaText(
               text: 'Alfabetização Móvel para Adultos',
               fontWeight: FontWeight.bold,
               color: AlmaTheme.primaryColor,

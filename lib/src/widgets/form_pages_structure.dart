@@ -32,14 +32,14 @@ class FormPagesStructure extends StatelessWidget {
               width: 130,
               iconData: Icons.arrow_back,
               color: AlmaTheme.primaryColor,
-              child: const AlmaTextWidget(text: 'Voltar'),
+              child: const AlmaText(text: 'Voltar'),
             ),
             buttonSave,
           ],
         ),
         const Divider(color: AlmaTheme.blackAlmaColor),
         const SizedBox(height: 15),
-        AlmaTextWidget(
+        AlmaText(
           text: title,
           fontSize: 32,
           fontWeight: FontWeight.bold,

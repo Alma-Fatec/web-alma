@@ -1,3 +1,7 @@
 enum RegisterState {
-  idle, loading, success, error
+  idle,
+  loading,
+  success,
+  error,
+  formWarnings,
 }

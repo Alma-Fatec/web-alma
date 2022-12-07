@@ -14,7 +14,7 @@ class DialogSelectBlocks extends StatelessWidget {
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          const AlmaTextWidget(
+          const AlmaText(
             text: 'Selecionar aluno',
             fontWeight: FontWeight.bold,
             color: AlmaTheme.primaryColor,
@@ -31,8 +31,8 @@ class DialogSelectBlocks extends StatelessWidget {
         child: ListView.builder(
           itemCount: controller.listAllBlocks.length,
           itemBuilder: (context, index) => ListTile(
-            title: AlmaTextWidget(text: controller.listAllBlocks[index].title!, fontWeight: FontWeight.bold),
-            subtitle: AlmaTextWidget(text: controller.listAllBlocks[index].description!, fontWeight: FontWeight.w500),
+            title: AlmaText(text: controller.listAllBlocks[index].title!, fontWeight: FontWeight.bold),
+            subtitle: AlmaText(text: controller.listAllBlocks[index].description!, fontWeight: FontWeight.w500),
             trailing: const Icon(Icons.arrow_right_rounded),
             onTap: () {
               controller.addBlockOnClass(controller.listAllBlocks[index]);

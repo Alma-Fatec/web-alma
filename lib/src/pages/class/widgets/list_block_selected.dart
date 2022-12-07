@@ -15,8 +15,8 @@ class ListBlockSelected extends StatelessWidget {
       itemBuilder: (context, index) => Card(
         child: ListTile(
           leading: const Icon(Icons.school_outlined),
-          title: AlmaTextWidget(text: controller.listBlocksClass[index].title!, fontWeight: FontWeight.bold),
-          subtitle: AlmaTextWidget(text: controller.listBlocksClass[index].description!, fontWeight: FontWeight.w500),
+          title: AlmaText(text: controller.listBlocksClass[index].title!, fontWeight: FontWeight.bold),
+          subtitle: AlmaText(text: controller.listBlocksClass[index].description!, fontWeight: FontWeight.w500),
         ),
       ),
     );

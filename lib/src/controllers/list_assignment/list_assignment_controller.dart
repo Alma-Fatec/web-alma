@@ -9,39 +9,38 @@ class ListAssignmentController extends ChangeNotifier {
   var state = ListAssignmentState.idle;
 
   List<Assignment> listAssignments = [];
+  List<Assignment> listAssignmentsAux = [];
+
+  int page = 1;
+  bool isLastPage = false;
 
   ListAssignmentRepository repository;
   ListAssignmentController(this.repository) {
     _getAssignments();
   }
 
+  Future<void> refresh() async {
+    await _getAssignments();
+  }
+
   Future<void> _getAssignments() async {
-    state = ListAssignmentState.loading;
-    notifyListeners();
+    setState(ListAssignmentState.loading);
 
     try {
-      listAssignments.clear();
       String token = await SharedPref().read('token');
-      ListResponse listClassBlockResp =
-          await repository.getListAssignments(token);
+      ListResponse listAssignmentResp =
+          await repository.getListAssignments(token, page);
+      setListAssignment(listAssignmentResp);
 
-      if (listAssignments.isEmpty) {
-        listClassBlockResp.data?.forEach((element) {
-          listAssignments.add(Assignment.fromJson(element));
-        });
-      }
-
-      state = ListAssignmentState.success;
-      notifyListeners();
+      setState(ListAssignmentState.success);
     } catch (e) {
-      state = ListAssignmentState.error;
-      notifyListeners();
+      setState(ListAssignmentState.error);
 
       throw Exception(e.toString());
     }
   }
 
-  Future<void> deleteAssignment(String id) async {
+  Future<void> deleteAssignment(int id) async {
     state = ListAssignmentState.loading;
     notifyListeners();
 
@@ -57,5 +56,64 @@ class ListAssignmentController extends ChangeNotifier {
 
       throw Exception(e.toString());
     }
+  }
+
+  void setListAssignment(ListResponse listAssignmentResp) {
+    listAssignments.clear();
+    listAssignmentsAux.clear();
+
+    listAssignmentResp.data?.forEach((element) {
+      listAssignmentsAux.add(Assignment.fromJson(element));
+    });
+
+    listAssignments.addAll(listAssignmentsAux);
+  }
+
+  void filterSearchResults(String query) {
+    setState(ListAssignmentState.idle);
+
+    List<Assignment> dummySearchList = [];
+    dummySearchList.addAll(listAssignmentsAux);
+
+    if (query.isNotEmpty) {
+      List<Assignment> dummyListData = [];
+      for (Assignment item in dummySearchList) {
+        if (item.title!.contains(query)) {
+          dummyListData.add(item);
+          notifyListeners();
+        }
+      }
+      listAssignments.clear();
+      listAssignments.addAll(dummyListData);
+      notifyListeners();
+      return;
+    } else {
+      listAssignments.clear();
+      listAssignments.addAll(listAssignmentsAux);
+      notifyListeners();
+    }
+  }
+
+  void nextPage() {
+    isLastPage = listAssignmentsAux.length < 10;
+
+    if (isLastPage) {
+      return;
+    }
+    page++;
+    _getAssignments();
+  }
+
+  void backPage() {
+    if (page == 1) {
+      return;
+    }
+    page--;
+    _getAssignments();
+  }
+
+  void setState(ListAssignmentState state) {
+    this.state = state;
+    notifyListeners();
   }
 }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class AlmaTextWidget extends StatelessWidget {
-  const AlmaTextWidget({
+class AlmaText extends StatelessWidget {
+  const AlmaText({
     super.key,
     required this.text,
     this.color,

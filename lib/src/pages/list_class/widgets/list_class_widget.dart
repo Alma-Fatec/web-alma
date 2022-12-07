@@ -1,7 +1,7 @@
 import 'package:alma_web/src/controllers/list_class/list_class_controller.dart';
 import 'package:alma_web/src/controllers/list_class/list_class_state.dart';
+import 'package:alma_web/src/routes/app_routes.dart';
 import 'package:alma_web/src/theme/alma_theme.dart';
-import 'package:alma_web/src/widgets/alma_button_widget.dart';
 import 'package:alma_web/src/widgets/alma_text_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -15,17 +15,23 @@ class ListClassWidget extends StatelessWidget {
     final controller = context.watch<ListClassController>();
 
     if (controller.state == ListClassState.loading) {
-      return const Center(
-        child: CircularProgressIndicator(
-          color: AlmaTheme.primaryColor,
+      return SizedBox(
+        height: MediaQuery.of(context).size.height / 1.4,
+        child: const Center(
+          child: CircularProgressIndicator(
+            color: AlmaTheme.primaryColor,
+          ),
         ),
       );
     } else if (controller.listClasses.isEmpty) {
-      return const Center(
-        child: AlmaTextWidget(
-          text: 'Nenhum item encontrado na lista',
-          fontSize: 22,
-          fontWeight: FontWeight.w500,
+      return SizedBox(
+        height: MediaQuery.of(context).size.height / 1.4,
+        child: const Center(
+          child: AlmaText(
+            text: 'Nenhum item encontrado na lista',
+            fontSize: 22,
+            fontWeight: FontWeight.w500,
+          ),
         ),
       );
     } else {
@@ -36,22 +42,41 @@ class ListClassWidget extends StatelessWidget {
         itemBuilder: (context, index) => Card(
           color: AlmaTheme.greyAlmaColor,
           child: ListTile(
-            title: AlmaTextWidget(
+            title: AlmaText(
               text: controller.listClasses[index].name!,
               fontWeight: FontWeight.bold,
               fontSize: 18,
             ),
-            subtitle: AlmaTextWidget(
+            subtitle: AlmaText(
               text: controller.listClasses[index].description!,
               fontWeight: FontWeight.w600,
             ),
-            trailing: AlmaButtonWidget(
-              onPressed: () => controller.deleteClass(
-                  controller.listClasses[index].description!, index),
-              height: 40,
-              width: 60,
-              color: AlmaTheme.secondaryColor,
-              child: const Icon(CupertinoIcons.delete),
+            trailing: SizedBox(
+              width: 100,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  IconButton(
+                    onPressed: () => Navigator.pushNamed(
+                      context,
+                      Routes.detailClass,
+                      arguments: controller.listClasses[index],
+                    ),
+                    color: AlmaTheme.actionColor,
+                    icon: const Icon(Icons.more_outlined),
+                    tooltip: 'Detalhes',
+                  ),
+                  const SizedBox(width: 5),
+                  IconButton(
+                    onPressed: () => controller.deleteClass(
+                        controller.listClasses[index].description!, index),
+                    color: AlmaTheme.secondaryColor,
+                    icon: const Icon(CupertinoIcons.delete),
+                    tooltip: 'Apagar',
+                  ),
+                ],
+              ),
             ),
           ),
         ),

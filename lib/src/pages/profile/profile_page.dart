@@ -2,6 +2,7 @@ import 'package:alma_web/src/controllers/profile/profile_controller.dart';
 import 'package:alma_web/src/controllers/profile/profile_state.dart';
 import 'package:alma_web/src/pages/profile/widgets/profile_info_widget.dart';
 import 'package:alma_web/src/theme/alma_theme.dart';
+import 'package:alma_web/src/utils/snackbar.dart';
 import 'package:alma_web/src/widgets/alma_page_structure.dart';
 import 'package:alma_web/src/widgets/alma_text_widget.dart';
 import 'package:flutter/material.dart';
@@ -19,23 +20,13 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   void initState() {
-    controller = context.read();
+    controller = context.read<ProfileController>();
 
     controller.addListener(() {
       if (controller.state == ProfileState.error) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: AlmaTextWidget(
-                text: 'Não foi possível carregar as informações do usuário!'),
-          ),
-        );
+        showSnackBar(context, 'Não foi possível carregar as informações do usuário!');
       } else if (controller.state == ProfileState.success) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            duration: Duration(milliseconds: 1000),
-            content: AlmaTextWidget(text: 'Informações do usuário carregadas com sucesso!'),
-          ),
-        );
+        showSnackBar(context, 'Informações do usuário carregadas com sucesso!', durationMilli: 1000);
       }
     });
 
@@ -49,7 +40,7 @@ class _ProfilePageState extends State<ProfilePage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: const [
-          AlmaTextWidget(
+          AlmaText(
             text: "Informações do usuário",
             fontSize: 32,
             fontWeight: FontWeight.bold,

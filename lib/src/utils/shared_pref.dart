@@ -6,14 +6,19 @@ class SharedPref {
     return await prefs.setString(key, value);
   }
 
+  Future<bool> saveBool(String key, dynamic value) async {
+    final prefs = await SharedPreferences.getInstance();
+    return await prefs.setBool(key, value);
+  }
+
   Future read(String key) async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.get(key);
   }
 
-  Future<void> remove(String key) async {
+  Future<bool> remove(String key) async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.remove(key);
+    return await prefs.remove(key);
   }
 
   Future<bool> contain(String key) async {

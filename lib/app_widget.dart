@@ -9,6 +9,8 @@ import 'package:alma_web/src/controllers/list_class_block/list_class_block_contr
 import 'package:alma_web/src/controllers/profile/profile_controller.dart';
 import 'package:alma_web/src/controllers/register/register_controller.dart';
 import 'package:alma_web/src/controllers/user/user_controller.dart';
+import 'package:alma_web/src/data/api/client_http.dart';
+import 'package:alma_web/src/data/api/interceptors.dart';
 import 'package:alma_web/src/data/models/auth/auth_model.dart';
 import 'package:alma_web/src/data/repository/assignment/assignment_repository.dart';
 import 'package:alma_web/src/data/repository/auth/auth_repository.dart';
@@ -25,15 +27,20 @@ import 'package:alma_web/src/pages/class/class_page.dart';
 import 'package:alma_web/src/pages/class_block/class_block_page.dart';
 import 'package:alma_web/src/pages/dashboard/dashboard_page.dart';
 import 'package:alma_web/src/pages/list_assignment/list_assignment_page.dart';
+import 'package:alma_web/src/pages/list_assignment/widgets/detail_assignment.dart';
 import 'package:alma_web/src/pages/list_class/list_class_page.dart';
+import 'package:alma_web/src/pages/list_class/widgets/detail_class.dart';
 import 'package:alma_web/src/pages/list_class_block/list_class_block_page.dart';
+import 'package:alma_web/src/pages/list_class_block/widgets/detail_class_block.dart';
 import 'package:alma_web/src/pages/profile/profile_page.dart';
 import 'package:alma_web/src/pages/register/register_page.dart';
 import 'package:alma_web/src/pages/user/list_users_page.dart';
 import 'package:alma_web/src/routes/app_routes.dart';
 import 'package:alma_web/src/theme/alma_theme.dart';
 import 'package:alma_web/src/utils/file_picker.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
 
 import 'src/data/models/list_response/list_response_model.dart';
@@ -44,35 +51,31 @@ class AppWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final client = HttpClient(
+      Dio()..interceptors.add(CustomInterceptors()),
+      baseUrl: "${dotenv.env['BASE_URL']}",
+    );
+
     return MultiProvider(
       providers: [
         // Auth injects
-        Provider(create: (_) => Auth()),
-        Provider(create: (context) => AuthRepository(context.read())),
-        ChangeNotifierProvider(
-            create: (context) =>
-                AuthController(context.read<AuthRepository>())),
+        Provider(create: (_) => AuthRepository(Auth(), client)),
+        ChangeNotifierProvider(create: (context) => AuthController(context.read<AuthRepository>())),
 
         // Register injects
-        Provider(create: (_) => User()),
-        Provider(create: (context) => RegisterRepository(context.read())),
-        ChangeNotifierProvider(
-            create: (context) =>
-                RegisterController(context.read<RegisterRepository>())),
+        Provider(create: (_) => RegisterRepository(User(), client)),
+        ChangeNotifierProvider(create: (context) => RegisterController(context.read<RegisterRepository>())),
 
         // Dashboard Injects
         ChangeNotifierProvider(create: (context) => DashboardController()),
 
         // List blocks injects
-        Provider(create: (_) => ListResponse()),
-        Provider(create: (context) => ListClassBlockRepository(context.read())),
-        ChangeNotifierProvider(
-            create: (context) => ListClassBlockController(
-                context.read<ListClassBlockRepository>())),
+        Provider(create: (_) => ListClassBlockRepository(ListResponse(), client)),
+        ChangeNotifierProvider(create: (context) => ListClassBlockController(context.read<ListClassBlockRepository>())),
 
         // Class blocks injects
         Provider(create: (_) => FilePickerUtil()),
-        Provider(create: (_) => ClassBlockRepository()),
+        Provider(create: (_) => ClassBlockRepository(client)),
         ChangeNotifierProvider(
           create: (context) => ClassBlockController(
             context.read<FilePickerUtil>(),
@@ -81,15 +84,12 @@ class AppWidget extends StatelessWidget {
         ),
 
         // List assignment injects
-        Provider(create: (_) => ListResponse()),
-        Provider(create: (context) => ListAssignmentRepository(context.read())),
-        ChangeNotifierProvider(
-            create: (context) => ListAssignmentController(
-                context.read<ListAssignmentRepository>())),
+        Provider(create: (_) => ListAssignmentRepository(ListResponse(), client)),
+        ChangeNotifierProvider(create: (context) => ListAssignmentController(context.read<ListAssignmentRepository>())),
 
         // Assignment injects
         Provider(create: (_) => FilePickerUtil()),
-        Provider(create: (_) => AssignmentRepository()),
+        Provider(create: (_) => AssignmentRepository(client, ListResponse())),
         ChangeNotifierProvider(
           create: (context) => AssignmentController(
             context.read<AssignmentRepository>(),
@@ -98,15 +98,12 @@ class AppWidget extends StatelessWidget {
         ),
 
         // List classes injects
-        Provider(create: (_) => ListResponse()),
-        Provider(create: (context) => ListClassRepository(context.read())),
-        ChangeNotifierProvider(
-            create: (context) =>
-                ListClassController(context.read<ListClassRepository>())),
+        Provider(create: (_) => ListClassRepository(ListResponse(), client)),
+        ChangeNotifierProvider(create: (context) => ListClassController(context.read<ListClassRepository>())),
 
         // Class injects
         Provider(create: (_) => FilePickerUtil()),
-        Provider(create: (_) => ClassRepository()),
+        Provider(create: (_) => ClassRepository(client)),
         ChangeNotifierProvider(
           create: (context) => ClassController(
             context.read<ClassRepository>(),
@@ -115,13 +112,11 @@ class AppWidget extends StatelessWidget {
         ),
 
         // Profile injects
-        Provider(create: (_) => User()),
-        ChangeNotifierProvider(create: (context) => ProfileController(context.read<User>())),
+        ChangeNotifierProvider(create: (context) => ProfileController(User())),
 
         // List users injects
-        Provider(create: (context) => UserRepository()),
+        Provider(create: (_) => UserRepository(client)),
         ChangeNotifierProvider(create: (context) => UserController(context.read<UserRepository>())),
-
       ],
       child: MaterialApp(
         title: 'ALMA Web',
@@ -139,7 +134,10 @@ class AppWidget extends StatelessWidget {
           Routes.listClasses: (context) => const ListClassPage(),
           Routes.classes: (context) => const ClassPage(),
           Routes.profile: (context) => const ProfilePage(),
-          Routes.listUsers:(context) => const ListUsersPage(),
+          Routes.listUsers: (context) => const ListUsersPage(),
+          Routes.detailAssignment: (context) => const DetailAssignment(),
+          Routes.detailClass: (context) => const DetailClass(), 
+          Routes.detailClassBlock: (context) => const DetailClassBlock(), 
         },
       ),
     );

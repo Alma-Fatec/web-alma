@@ -1,16 +1,20 @@
+import 'package:alma_web/src/data/api/client_http.dart';
 import 'package:alma_web/src/data/models/auth/auth_model.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class AuthRepository {
   Auth auth;
-  AuthRepository(this.auth);
+  HttpClient client;
+  AuthRepository(this.auth, this.client);
 
-  Future<Auth> authRequest(String email, String password) async {
+  Future<Auth> authRequest(String email, String password, String token) async {
     try {
-      final response = await Dio().post(
-        "${dotenv.env['BASE_URL']}/session/login/",
+      final response = await client.post(
+        "/session/login/",
         data: {"email": email, "password": password},
+        options: Options(
+          headers: { "Authorization": "Bearer $token" }
+        ),
       );
 
       if (response.statusCode != 200 && response.statusCode != 201) {

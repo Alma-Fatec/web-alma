@@ -20,7 +20,7 @@ class SideMenuWidget extends StatelessWidget {
                 children: const [
                   Icon(CupertinoIcons.home,
                   size: 30, color: Colors.white),
-                  AlmaTextWidget(text: 'Home', fontSize: 12, color: Colors.white),
+                  AlmaText(text: 'Home', fontSize: 12, color: Colors.white),
                 ],
               ),
               onTap: () => Navigator.pushReplacementNamed(context, Routes.dashboard, result: true),
@@ -31,7 +31,7 @@ class SideMenuWidget extends StatelessWidget {
                 children: const [
                   Icon(Icons.my_library_books_outlined,
                   size: 30, color: Colors.white),
-                  AlmaTextWidget(
+                  AlmaText(
                       text: 'Blocos', fontSize: 12, color: Colors.white),
                 ],
               ),
@@ -43,7 +43,7 @@ class SideMenuWidget extends StatelessWidget {
                 children: const [
                   Icon(CupertinoIcons.calendar,
                   size: 30, color: Colors.white),
-                  AlmaTextWidget(
+                  AlmaText(
                       text: 'Aulas', fontSize: 12, color: Colors.white),
                 ],
               ),
@@ -55,7 +55,7 @@ class SideMenuWidget extends StatelessWidget {
                 children: const [
                   Icon(CupertinoIcons.book,
                   size: 30, color: Colors.white),
-                  AlmaTextWidget(
+                  AlmaText(
                       text: 'Atividades', fontSize: 12, color: Colors.white),
                 ],
               ),
@@ -67,7 +67,7 @@ class SideMenuWidget extends StatelessWidget {
                 children: const [
                   Icon(Icons.school_outlined,
                   size: 30, color: Colors.white),
-                  AlmaTextWidget(
+                  AlmaText(
                       text: 'Alunos', fontSize: 12, color: Colors.white),
                 ],
               ),
@@ -79,7 +79,7 @@ class SideMenuWidget extends StatelessWidget {
                 children: const [
                   Icon(CupertinoIcons.person_crop_circle,
                   size: 30, color: Colors.white),
-                  AlmaTextWidget(
+                  AlmaText(
                       text: 'Perfil', fontSize: 12, color: Colors.white),
                 ],
               ),
@@ -93,7 +93,7 @@ class SideMenuWidget extends StatelessWidget {
                 children: const [
                   Icon(Icons.content_paste_search_rounded,
                   size: 30, color: Colors.white),
-                  AlmaTextWidget(
+                  AlmaText(
                       text: 'Pré-teste', fontSize: 12, color: Colors.white),
                 ],
               ),
@@ -105,7 +105,7 @@ class SideMenuWidget extends StatelessWidget {
                 children: const [
                   Icon(Icons.content_paste_go_rounded,
                   size: 30, color: Colors.white),
-                  AlmaTextWidget(
+                  AlmaText(
                       text: 'Pós-teste', fontSize: 12, color: Colors.white),
                 ],
               ),

@@ -19,7 +19,7 @@ class CheckButtonRemember extends StatelessWidget {
           fillColor: MaterialStateProperty.all(AlmaTheme.secondaryColor),
           checkColor: Colors.white,
         ),
-        const AlmaTextWidget(text: 'Lembrar senha', color: Colors.white),
+        const AlmaText(text: 'Lembrar senha', color: Colors.white),
       ],
     );
   }

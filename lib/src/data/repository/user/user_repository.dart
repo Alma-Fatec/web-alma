@@ -1,14 +1,21 @@
+import 'package:alma_web/src/data/api/client_http.dart';
 import 'package:alma_web/src/data/models/user/user_model.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class UserRepository {
-  Future<List<User>> getAllUsers(String token) async {
+  HttpClient client;
+
+  UserRepository(this.client);
+
+  Future<List<User>> getAllUsers(String token, int page) async {
     List<User> users = [];
 
     try {
-      final response = await Dio().get(
-        "${dotenv.env['BASE_URL']}/users",
+      final response = await client.get(
+        "/users",
+        queryParameters: {
+          "page": page,
+        },
         options: Options(
           headers: {
             "Authorization": "Bearer $token",

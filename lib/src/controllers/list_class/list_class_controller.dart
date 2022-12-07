@@ -8,10 +8,18 @@ import 'package:flutter/widgets.dart';
 class ListClassController extends ChangeNotifier {
   var state = ListClassState.idle;
   List<Class> listClasses = [];
+  List<Class> classListAux = [];
+
+  int page = 1;
+  bool isLastPage = false;
 
   ListClassRepository repository;
   ListClassController(this.repository) {
     _getListClass();
+  }
+
+  Future<void> refresh() async {
+    await _getListClass();
   }
 
   Future<void> _getListClass() async {
@@ -20,13 +28,8 @@ class ListClassController extends ChangeNotifier {
 
     try {
       String token = await SharedPref().read('token');
-      ListResponse listClassBlockResp = await repository.getListClasses(token);
-
-      if (listClasses.isEmpty) {
-        listClassBlockResp.data?.forEach((element) {
-          listClasses.add(Class.fromJson(element));
-        });
-      }
+      ListResponse listClassResp = await repository.getListClasses(token, page);
+      setListClass(listClassResp);
 
       setState(ListClassState.success);
     } catch (e) {
@@ -51,8 +54,62 @@ class ListClassController extends ChangeNotifier {
     }
   }
 
+  void setListClass(ListResponse listClassResp) {
+    classListAux.clear();
+    listClasses.clear();
+    
+    listClassResp.data?.forEach((element) {
+      classListAux.add(Class.fromJson(element));
+    });
+
+    listClasses.addAll(classListAux);
+  }
+
+  void nextPage() {
+    isLastPage = classListAux.length < 10;
+
+    if (isLastPage) {
+      return;
+    }
+    page++;
+    _getListClass();
+  }
+
+  void backPage() {
+    if (page == 1) {
+      return;
+    }
+    page--;
+    _getListClass();
+  }
+
   void setState(ListClassState state) {
     this.state = state;
     notifyListeners();
+  }
+
+  void filterSearchResults(String query) {
+    setState(ListClassState.idle);
+
+    List<Class> dummySearchList = [];
+    dummySearchList.addAll(classListAux);
+
+    if (query.isNotEmpty) {
+      List<Class> dummyListData = [];
+      for (Class item in dummySearchList) {
+        if (item.name!.contains(query)) {
+          dummyListData.add(item);
+          notifyListeners();
+        }
+      }
+      listClasses.clear();
+      listClasses.addAll(dummyListData);
+      notifyListeners();
+      return;
+    } else {
+      listClasses.clear();
+      listClasses.addAll(classListAux);
+      notifyListeners();
+    }
   }
 }

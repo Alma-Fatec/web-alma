@@ -5,6 +5,7 @@ import 'package:alma_web/src/pages/auth/widgets/check_button_remember.dart';
 import 'package:alma_web/src/pages/auth/widgets/text_field_password.dart';
 import 'package:alma_web/src/routes/app_routes.dart';
 import 'package:alma_web/src/theme/alma_theme.dart';
+import 'package:alma_web/src/utils/snackbar.dart';
 import 'package:alma_web/src/widgets/alma_text_field.dart';
 import 'package:alma_web/src/widgets/alma_text_widget.dart';
 import 'package:alma_web/src/widgets/sidebar_widget.dart';
@@ -20,28 +21,18 @@ class AuthPage extends StatefulWidget {
 
 class _AuthPageState extends State<AuthPage> {
   late AuthController controller;
-  
+
   @override
   void initState() {
     controller = context.read<AuthController>();
 
     controller.addListener(() {
       if (controller.state == AuthState.errorAuth) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: AlmaTextWidget(
-              text:
-                  controller.message ?? 'Erro ao fazer a autenticação!',
-            ),
-          ),
-        );
+        showSnackBar(context, controller.message ?? 'Erro ao fazer a autenticação!');
       } else if (controller.state == AuthState.successAuth) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            duration: const Duration(milliseconds: 1000),
-            content: AlmaTextWidget(text: controller.message!),
-          ),
-        );
+        showSnackBar(context, controller.message!, durationMilli: 1000);
+        Navigator.pushReplacementNamed(context, '/dashboard');
+      } else if (controller.state == AuthState.isRememberUser) {
         Navigator.pushReplacementNamed(context, '/dashboard');
       }
     });
@@ -61,7 +52,7 @@ class _AuthPageState extends State<AuthPage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const AlmaTextWidget(
+                const AlmaText(
                   text: 'BEM-VINDO',
                   fontWeight: FontWeight.w600,
                   fontSize: 44,
@@ -83,14 +74,15 @@ class _AuthPageState extends State<AuthPage> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     TextButton(
-                      onPressed: () => Navigator.pushNamed(context, Routes.register),
-                      child: const AlmaTextWidget(
+                      onPressed: () =>
+                          Navigator.pushNamed(context, Routes.register),
+                      child: const AlmaText(
                           text: 'Não tem uma conta?',
                           color: AlmaTheme.greyAlmaColor),
                     ),
                     TextButton(
                       onPressed: () {},
-                      child: const AlmaTextWidget(
+                      child: const AlmaText(
                           text: 'Esqueceu sua senha?',
                           color: AlmaTheme.greyAlmaColor),
                     ),

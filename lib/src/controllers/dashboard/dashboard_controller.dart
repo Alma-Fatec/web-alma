@@ -7,7 +7,7 @@ class DashboardController extends ChangeNotifier {
 
   Future<void> logout() async {
     try {
-      if (!await SharedPref().clearAll()) {
+      if (!await SharedPref().remove('rememberUser')) {
         setState(DashboardState.logoutError);
         return;
       }

@@ -1,5 +1,6 @@
 import 'package:alma_web/src/widgets/alma_text_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class AlmaTextField extends StatelessWidget {
   const AlmaTextField({
@@ -9,9 +10,11 @@ class AlmaTextField extends StatelessWidget {
     this.onSubmited,
     this.hintText,
     this.label,
+    this.inputFormatters,
     this.prefixIcon,
     this.suffixIcon,
     this.obscureText,
+    this.validator,
     this.maxLines,
     this.labelColor,
     this.maxLength,
@@ -28,6 +31,8 @@ class AlmaTextField extends StatelessWidget {
   final int? maxLines;
   final Color? labelColor;
   final int? maxLength;
+  final String? Function(String?)? validator;
+  final List<TextInputFormatter>? inputFormatters;
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +43,7 @@ class AlmaTextField extends StatelessWidget {
             ? Container()
             : Column(
                 children: [
-                  AlmaTextWidget(
+                  AlmaText(
                     text: label!,
                     color: labelColor ?? Colors.white,
                     fontWeight: FontWeight.w600,
@@ -54,6 +59,8 @@ class AlmaTextField extends StatelessWidget {
           obscureText: obscureText ?? false,
           maxLines: maxLines ?? 1,
           maxLength: maxLength,
+          validator: validator,
+          inputFormatters: inputFormatters,
           decoration: InputDecoration(
             hintText: hintText,
             prefixIcon: prefixIcon,
